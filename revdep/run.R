@@ -1,4 +1,4 @@
-options(warn = 1, error = function() traceback())
+options(warn = 1)
 
 availableCores <- function() {
   getenv <- function(name) {
