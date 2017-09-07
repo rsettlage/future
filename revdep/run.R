@@ -28,5 +28,6 @@ if (revdep_framework == "devtools") {
   if (reset) revdep_reset()
   revdep_check(bioc = TRUE, num_workers = availableCores(),
                timeout = as.difftime(30, units = "mins"), quiet = FALSE)
+} else {	       
   stop("Unknown revdep framework: ", revdep_framework)
 }
