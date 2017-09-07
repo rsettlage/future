@@ -36,7 +36,7 @@
 |[aroma.core](problems.md#aroma.core)                     |3.1.0      |      |        |2    |
 |[brms](problems.md#brms)                                 |1.9.0      |      |1       |1    |
 |[doFuture](problems.md#dofuture)                         |0.5.0      |      |        |1    |
-|[fiery](problems.md#fiery)                               |1.0.0      |1     |1       |1    |
+|[fiery](problems.md#fiery)                               |1.0.0      |      |1       |1    |
 |[future.BatchJobs](problems.md#future.batchjobs)         |0.14.1     |      |        |1    |
 |[future.batchtools](problems.md#future.batchtools)       |0.5.0      |      |        |1    |
 |[googleComputeEngineR](problems.md#googlecomputeenginer) |0.1.0      |1     |        |1    |

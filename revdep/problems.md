@@ -92,28 +92,6 @@ Version: 1.0.0
 
 ## In both
 
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      5: private$run(block = block, showcase = showcase, ...)
-      6: private$run_blocking_server(showcase = showcase)
-      7: startServer(self$host, self$port, list(call = private$request_logic, onHeaders = private$header_logic, 
-             onWSOpen = private$websocket_logic))
-      8: stop("Failed to create server")
-      
-      testthat results ================================================================
-      OK: 209 SKIPPED: 0 FAILED: 4
-      1. Error: life cycle events get fired (@test-Fire.R#168) 
-      2. Error: futures can be added and called (@test-Fire.R#302) 
-      3. Error: ignite is blocked during run (@test-Fire.R#387) 
-      4. Error: external triggers are fired (@test-Fire.R#404) 
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
 *   checking top-level files ... WARNING
     ```
     Conversion of ‘README.md’ failed:
