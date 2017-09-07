@@ -1,19 +1,19 @@
 # Platform
 
-|field    |value                                                  |
-|:--------|:------------------------------------------------------|
-|version  |R version 3.4.1 (2017-06-30)                           |
-|os       |Red Hat Enterprise Linux Server release 6.6 (Santiago) |
-|system   |x86_64, linux-gnu                                      |
-|ui       |X11                                                    |
-|language |en                                                     |
-|collate  |en_US.UTF-8                                            |
-|tz       |NA                                                     |
-|date     |2017-09-03                                             |
+|field    |value                        |
+|:--------|:----------------------------|
+|version  |R version 3.4.1 (2017-06-30) |
+|os       |NA                           |
+|system   |x86_64, linux-gnu            |
+|ui       |X11                          |
+|language |en                           |
+|collate  |C                            |
+|tz       |NA                           |
+|date     |2017-09-06                   |
 
 # Dependencies
 
-|package |old    |new        |Δ  |
+|package |old    |new        |<U+0394>  |
 |:-------|:------|:----------|:--|
 |future  |1.6.0  |1.6.0-9000 |*  |
 |digest  |0.6.12 |0.6.12     |   |
@@ -37,7 +37,7 @@
 |[brms](problems.md#brms)                           |1.9.0      |      |3       |1    |
 |[doFuture](problems.md#dofuture)                   |0.5.0      |      |        |1    |
 |fiery                                              |1.0.0      |      |        |     |
-|[future.BatchJobs](problems.md#future.batchjobs)   |0.14.1     |-1    |        |1    |
+|[future.BatchJobs](problems.md#future.batchjobs)   |0.14.1     |      |        |1    |
 |[future.batchtools](problems.md#future.batchtools) |0.5.0      |      |        |1    |
 |googleComputeEngineR                               |?          |      |        |     |
 |[kernelboot](problems.md#kernelboot)               |0.1.1      |      |        |1    |

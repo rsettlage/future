@@ -123,30 +123,6 @@ Version: 0.5.0
 
 Version: 0.14.1
 
-## Newly fixed
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in 'tests/batchjobs_job.delay.R' failed.
-    Last 13 lines of output:
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Warning: Couldn't set synchronous mode: database is locked
-      Use `synchronous` = NULL to turn off this warning.
-      Error in value[[3L]](cond) : 
-        Error syncing registry (Error in dbDoQueries(reg, unlist(queries[ok]), "rw"): dbDoQueries: max retries (100) reached, database is still locked!
-      )
-    ```
-
 ## In both
 
 *   checking CRAN incoming feasibility ... NOTE
