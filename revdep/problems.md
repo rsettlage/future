@@ -157,36 +157,10 @@ Version: 0.5.0
 
 Version: 0.1.0
 
-## Newly broken
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      testthat results ================================================================
-      OK: 53 SKIPPED: 0 FAILED: 39
-      1. Error: We can login (@test_aa_auth.R#7) 
-      2. Error: We can see a project resource (@test_aa_auth.R#16) 
-      3. Error: We can list networks (@test_aa_auth.R#70) 
-      4. Error: We can get a network (@test_aa_auth.R#79) 
-      5. Error: We can make a container VM (@test_bb_create_vm.R#5) 
-      6. Error: We can make a VM with metadata (@test_bb_create_vm.R#23) 
-      7. Error: We can make a template VM (@test_bb_create_vm.R#41) 
-      8. Error: We can run SSH on an instance (@test_bb_create_vm.R#62) 
-      9. Error: We can check SSH settings (@test_bb_create_vm.R#77) 
-      1. ...
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
-## Newly fixed
+## In both
 
 *   R CMD check timed out
     
-
-## In both
 
 *   checking CRAN incoming feasibility ... NOTE
     ```
