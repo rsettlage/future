@@ -25,7 +25,6 @@ if (revdep_framework == "devtools") {
   revdep_check_print_problems()
 } else if (revdep_framework == "revdepcheck") {
   library("revdepcheck")
-} else {
   if (reset) revdep_reset()
   revdep_check(bioc = TRUE, num_workers = availableCores(),
                timeout = as.difftime(30, units = "mins"), quiet = FALSE)
