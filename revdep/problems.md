@@ -61,6 +61,9 @@ Version: 1.9.0
 
 ## In both
 
+*   R CMD check timed out
+    
+
 *   checking top-level files ... WARNING
     ```
     Conversion of 'README.md' failed:
@@ -73,32 +76,6 @@ Version: 1.9.0
     checking a package with encoding  'UTF-8'  in an ASCII locale
     ```
 
-*   checking re-building of vignette outputs ... WARNING
-    ```
-    ...
-    http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
-    Warning: Examine the pairs() plot to diagnose sampling problems
-    
-    Using 10 posterior samples for ppc type 'dens_overlay' by default.
-    Using 10 posterior samples for ppc type 'dens_overlay' by default.
-    Warning: Found 1 observations with a pareto_k > 0.7 in model 'fit1'. It is recommended to set 'reloo = TRUE' in order to calculate the ELPD without the assumption that these observations are negligible. This will refit the model 1 times to compute the ELPDs for the problematic observations directly.
-    Warning: Found 1 observations with a pareto_k > 0.7 in model 'fit2'. It is recommended to set 'reloo = TRUE' in order to calculate the ELPD without the assumption that these observations are negligible. This will refit the model 1 times to compute the ELPDs for the problematic observations directly.
-    Compiling the C++ model
-    Start sampling
-    Compiling the C++ model
-    Start sampling
-    Compiling the C++ model
-    Start sampling
-    Compiling the C++ model
-    Start sampling
-    Warning in file(file, "r") :
-      cannot open file 'C:/Users/paulb/Dropbox/Psychologie/Paper/2015_Bayesian_Regression_Models/Models/MCMCglmm/phylo.nex': No such file or directory
-    Quitting from lines 35-40 (brms_phylogenetics.Rmd) 
-    Error: processing vignette 'brms_phylogenetics.Rmd' failed with diagnostics:
-    cannot open the connection
-    Execution halted
-    ```
-
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: 'Paul-Christian B<U+00FC>rkner <paul.buerkner@gmail.com>'
@@ -109,6 +86,30 @@ Version: 1.9.0
 # doFuture
 
 Version: 0.5.0
+
+## Newly fixed
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in 'tests/doRNG,dopar.R' failed.
+    Last 13 lines of output:
+      - args: function (expr, envir = parent.frame(), substitute = TRUE, lazy = FALSE, seed = NULL, globals = TRUE, persistent = FALSE, workers = availableWorkers(), user = NULL, revtunnel = TRUE, homogeneous = TRUE, gc = FALSE, earlySignal = FALSE, label = NULL, ...)
+      - tweaked: FALSE
+      - call: plan(strategy)
+      Workers: [n = 2] 'localhost', 'localhost'
+      Base port: 11622
+      Creating node 1 of 2 ...
+      - setting up node
+      Starting worker #1 on 'localhost': '/home/shared/cbc/software_cbc/R/R-3.4.1-20170630/lib64/R/bin/Rscript' --default-packages=datasets,utils,grDevices,graphics,stats,methods -e 'parallel:::.slaveRSOCK()' MASTER=localhost PORT=11622 OUT=/dev/null TIMEOUT=2592000 XDR=TRUE
+      Waiting for worker #1 on 'localhost' to connect back
+      Warning in socketConnection("localhost", port = port, server = TRUE, blocking = TRUE,  :
+        port 11622 cannot be opened
+      Error in socketConnection("localhost", port = port, server = TRUE, blocking = TRUE,  : 
+        cannot open the connection
+      Calls: plan ... makeClusterPSOCK -> makeNode -> <Anonymous> -> socketConnection
+      Execution halted
+    ```
 
 ## In both
 
@@ -145,6 +146,55 @@ Version: 0.5.0
     This build time stamp is over a month old.
     ```
 
+# googleComputeEngineR
+
+Version: 0.1.0
+
+## Newly broken
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in 'tests/testthat.R' failed.
+    Last 13 lines of output:
+      testthat results ================================================================
+      OK: 53 SKIPPED: 0 FAILED: 39
+      1. Error: We can login (@test_aa_auth.R#7) 
+      2. Error: We can see a project resource (@test_aa_auth.R#16) 
+      3. Error: We can list networks (@test_aa_auth.R#70) 
+      4. Error: We can get a network (@test_aa_auth.R#79) 
+      5. Error: We can make a container VM (@test_bb_create_vm.R#5) 
+      6. Error: We can make a VM with metadata (@test_bb_create_vm.R#23) 
+      7. Error: We can make a template VM (@test_bb_create_vm.R#41) 
+      8. Error: We can run SSH on an instance (@test_bb_create_vm.R#62) 
+      9. Error: We can check SSH settings (@test_bb_create_vm.R#77) 
+      1. ...
+      
+      Error: testthat unit tests failed
+      Execution halted
+    ```
+
+## Newly fixed
+
+*   R CMD check timed out
+    
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: 'Mark Edmondson <r@sunholo.com>'
+    
+    This build time stamp is over a month old.
+    ```
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is 1024.5Mb
+      sub-directories of 1Mb or more:
+        doc  1024.1Mb
+    ```
+
 # kernelboot
 
 Version: 0.1.1
@@ -158,6 +208,13 @@ Version: 0.1.1
     The Date field is over a month old.
     
     This build time stamp is over a month old.
+    ```
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is 1024.1Mb
+      sub-directories of 1Mb or more:
+        libs  1024.0Mb
     ```
 
 # multiApply
