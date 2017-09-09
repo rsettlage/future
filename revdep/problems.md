@@ -87,30 +87,6 @@ Version: 1.9.0
 
 Version: 0.5.0
 
-## Newly fixed
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in 'tests/doRNG,dopar.R' failed.
-    Last 13 lines of output:
-      - args: function (expr, envir = parent.frame(), substitute = TRUE, lazy = FALSE, seed = NULL, globals = TRUE, persistent = FALSE, workers = availableWorkers(), user = NULL, revtunnel = TRUE, homogeneous = TRUE, gc = FALSE, earlySignal = FALSE, label = NULL, ...)
-      - tweaked: FALSE
-      - call: plan(strategy)
-      Workers: [n = 2] 'localhost', 'localhost'
-      Base port: 11622
-      Creating node 1 of 2 ...
-      - setting up node
-      Starting worker #1 on 'localhost': '/home/shared/cbc/software_cbc/R/R-3.4.1-20170630/lib64/R/bin/Rscript' --default-packages=datasets,utils,grDevices,graphics,stats,methods -e 'parallel:::.slaveRSOCK()' MASTER=localhost PORT=11622 OUT=/dev/null TIMEOUT=2592000 XDR=TRUE
-      Waiting for worker #1 on 'localhost' to connect back
-      Warning in socketConnection("localhost", port = port, server = TRUE, blocking = TRUE,  :
-        port 11622 cannot be opened
-      Error in socketConnection("localhost", port = port, server = TRUE, blocking = TRUE,  : 
-        cannot open the connection
-      Calls: plan ... makeClusterPSOCK -> makeNode -> <Anonymous> -> socketConnection
-      Execution halted
-    ```
-
 ## In both
 
 *   checking CRAN incoming feasibility ... NOTE
@@ -150,36 +126,10 @@ Version: 0.5.0
 
 Version: 0.1.0
 
-## Newly broken
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in 'tests/testthat.R' failed.
-    Last 13 lines of output:
-      testthat results ================================================================
-      OK: 53 SKIPPED: 0 FAILED: 39
-      1. Error: We can login (@test_aa_auth.R#7) 
-      2. Error: We can see a project resource (@test_aa_auth.R#16) 
-      3. Error: We can list networks (@test_aa_auth.R#70) 
-      4. Error: We can get a network (@test_aa_auth.R#79) 
-      5. Error: We can make a container VM (@test_bb_create_vm.R#5) 
-      6. Error: We can make a VM with metadata (@test_bb_create_vm.R#23) 
-      7. Error: We can make a template VM (@test_bb_create_vm.R#41) 
-      8. Error: We can run SSH on an instance (@test_bb_create_vm.R#62) 
-      9. Error: We can check SSH settings (@test_bb_create_vm.R#77) 
-      1. ...
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
-## Newly fixed
+## In both
 
 *   R CMD check timed out
     
-
-## In both
 
 *   checking CRAN incoming feasibility ... NOTE
     ```
