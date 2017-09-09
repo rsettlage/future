@@ -86,25 +86,6 @@ Version: 0.5.0
     This build time stamp is over a month old.
     ```
 
-# fiery
-
-Version: 1.0.0
-
-## In both
-
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://img.shields.io/codecov/c/github/thomasp85/fiery/master.svg
-    TlsExceptionHostPort (HandshakeFailed Error_EOF) "img.shields.io" 443
-    ```
-
-*   checking dependencies in R code ... NOTE
-    ```
-    Namespace in Imports field not imported from: ‘desc’
-      All declared Imports should be used.
-    ```
-
 # future.BatchJobs
 
 Version: 0.14.1
@@ -280,7 +261,7 @@ Version: 1.12.0
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25160724814266134.436.838865427962972207.660.838865426569142207.650.2
+    25163504814608134.436.838865427962972207.660.838865426569143207.650.2
     FINISHED!
     
     Total time:0minutes
