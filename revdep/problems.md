@@ -24,7 +24,7 @@ Version: 3.1.0
 
 # aroma.core
 
-Version: 3.1.0
+Version: 3.1.1
 
 ## In both
 
@@ -57,9 +57,31 @@ Version: 3.1.0
 
 # brms
 
-Version: 1.9.0
+Version: 1.10.0
 
 ## In both
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in 'tests/testthat.R' failed.
+    Last 13 lines of output:
+      can be found by typing help('brms'). A more detailed introduction
+      to the package is available through vignette('brms_overview').
+      Run theme_set(theme_default()) to use the default bayesplot theme.
+      > 
+      > test_check("brms")
+      1. Failure: plotting functions don't throw unexpected errors (@tests.plots.R#13) 
+      p <- stanplot(fit, type = "trace", pars = "^b_") produced messages.
+      
+      
+      testthat results ================================================================
+      OK: 1195 SKIPPED: 1 FAILED: 1
+      1. Failure: plotting functions don't throw unexpected errors (@tests.plots.R#13) 
+      
+      Error: testthat unit tests failed
+      Execution halted
+    ```
 
 *   R CMD check timed out
     
@@ -81,11 +103,21 @@ Version: 1.9.0
     Maintainer: 'Paul-Christian B<U+00FC>rkner <paul.buerkner@gmail.com>'
     
     The Date field is over a month old.
+    
+    This build time stamp is over a month old.
+    ```
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is  5.3Mb
+      sub-directories of 1Mb or more:
+        R     2.2Mb
+        doc   2.4Mb
     ```
 
 # doFuture
 
-Version: 0.5.0
+Version: 0.5.1
 
 ## In both
 
@@ -98,7 +130,7 @@ Version: 0.5.0
 
 # future.BatchJobs
 
-Version: 0.14.1
+Version: 0.15.0
 
 ## In both
 
@@ -111,7 +143,7 @@ Version: 0.14.1
 
 # future.batchtools
 
-Version: 0.5.0
+Version: 0.6.0
 
 ## In both
 
@@ -124,41 +156,45 @@ Version: 0.5.0
 
 # googleComputeEngineR
 
-Version: 0.1.0
+Version: 0.2.0
 
 ## In both
 
-*   R CMD check timed out
-    
-
-*   checking CRAN incoming feasibility ... NOTE
+*   checking tests ...
     ```
-    Maintainer: 'Mark Edmondson <r@sunholo.com>'
-    
-    This build time stamp is over a month old.
+     ERROR
+    Running the tests in 'tests/testthat.R' failed.
+    Last 13 lines of output:
+      testthat results ================================================================
+      OK: 17 SKIPPED: 0 FAILED: 46
+      1. Error: We can see a project resource (@test_aa_auth.R#16) 
+      2. Error: We can set auto project (@test_aa_auth.R#26) 
+      3. Error: We can get auto project (@test_aa_auth.R#37) 
+      4. Error: We can list networks (@test_aa_auth.R#70) 
+      5. Error: We can get a network (@test_aa_auth.R#79) 
+      6. Error: We can make a container VM (@test_bb_create_vm.R#7) 
+      7. Error: We can make a VM with metadata (@test_bb_create_vm.R#24) 
+      8. Error: We can make a template VM (@test_bb_create_vm.R#41) 
+      9. Error: We can make a VM with custom disk size (@test_bb_create_vm.R#57) 
+      1. ...
+      
+      Error: testthat unit tests failed
+      Execution halted
     ```
 
 *   checking installed package size ... NOTE
     ```
-      installed size is 1024.5Mb
+      installed size is 1027.0Mb
       sub-directories of 1Mb or more:
-        doc  1024.1Mb
+        doc          1024.3Mb
+        dockerfiles     2.3Mb
     ```
 
 # kernelboot
 
-Version: 0.1.1
+Version: 0.1.2
 
 ## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: 'Tymoteusz Wolodzko <twolodzko+kernelboot@gmail.com>'
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
 
 *   checking installed package size ... NOTE
     ```
@@ -207,6 +243,19 @@ Version: 0.8.0
     ```
     Namespace in Imports field not imported from: 'methods'
       All declared Imports should be used.
+    ```
+
+# pbmcapply
+
+Version: 1.2.4
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: 'Kevin kuang <kvn.kuang@mail.utoronto.ca>'
+    
+    This build time stamp is over a month old.
     ```
 
 # penaltyLearning
@@ -297,9 +346,31 @@ Version: 2.11.0
 
 # sperrorest
 
-Version: 2.0.1
+Version: 2.1.0
 
 ## In both
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in 'tests/testthat.R' failed.
+    Last 13 lines of output:
+      1. Error: sperrorest() when missing factor levels in train data (@test-sperrorest.R#639) 
+      cannot open the connection
+      1: readRDS("/Users/pjs/Servers/GIServer/home/shares/data/LIFE/mod/survey_data/data-clean.rda") %>% 
+             as_tibble() at testthat/test-sperrorest.R:639
+      2: eval(lhs, parent, parent)
+      3: eval(lhs, parent, parent)
+      4: readRDS("/Users/pjs/Servers/GIServer/home/shares/data/LIFE/mod/survey_data/data-clean.rda")
+      5: gzfile(file, "rb")
+      
+      testthat results ================================================================
+      OK: 100 SKIPPED: 7 FAILED: 1
+      1. Error: sperrorest() when missing factor levels in train data (@test-sperrorest.R#639) 
+      
+      Error: testthat unit tests failed
+      Execution halted
+    ```
 
 *   checking top-level files ... WARNING
     ```
@@ -317,15 +388,6 @@ Version: 2.0.1
     Error: processing vignette 'spatial-modeling-use-case.Rmd' failed with diagnostics:
     pandoc document conversion failed with error 67
     Execution halted
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: 'Alexander Brenning <alexander.brenning@uni-jena.de>'
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
 # startR
