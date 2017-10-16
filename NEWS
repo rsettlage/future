@@ -1,7 +1,25 @@
 Package: future
 ===============
 
-Version: 1.6.0-9000 [2017-09-08]
+Version: 1.6.1-9000 [2017-10-04]
+
+NEW FEATURES:
+
+ o Now plan() accepts also strings such as "future::cluster".
+
+ o Now backtrace(x[[el]]) works also for non-environment 'x':s, e.g. lists.
+
+BUG FIXES:
+
+ o When measuring the size of globals by scanning their content, for certain
+   types of classes the inferred lengths of these objects were incorrect
+   causing internal subset out-of-range issues.
+
+ o print() for Future would output one global per line instead of
+   concatenating the information with commas.
+
+
+Version: 1.6.1 [2017-09-08]
 
 NEW FEATURES:
 
