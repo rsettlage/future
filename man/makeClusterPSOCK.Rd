@@ -138,8 +138,10 @@ Most Unix-like systems, including macOS, have \command{ssh} preinstalled
 on the \code{PATH}.  It is less common to find this command on Windows
 system, which are more likely to have the \command{PuTTY} software and
 its SSH client \command{plink} installed.
-If neither \command{ssh} nor \command{plink} is found, an informative error
-message is produced.
+Furthermore, when running \R from RStudio on Windows, the \command{ssh}
+client that is distributed with RStudio will be used as a fallback if
+neither of the above two commands are available on the \code{PATH}.
+If no SSH-client is found, an informative error message is produced.
 It is also possible to specify the absolute path to the SSH client.  To do
 this for PuTTY, specify the absolute path in the first element and option
 \command{-ssh} in the second as in
@@ -172,17 +174,17 @@ on some systems, e.g. compute clusters.
 
 \section{Default value of argument \code{rscript}}{
 
-If \code{homogenenous} is FALSE, the \code{rscript} defaults to
+If \code{homogeneous} is FALSE, the \code{rscript} defaults to
 \code{"Rscript"}, i.e. it is assumed that the \command{Rscript} executable
 is available on the \code{PATH} of the worker.
-If \code{homogenenous} is TRUE, the \code{rscript} defaults to
+If \code{homogeneous} is TRUE, the \code{rscript} defaults to
 \code{file.path(R.home("bin"), "Rscript")}, i.e. it is basically assumed
 that the worker and the caller share the same file system and R installation.
 }
 
 \section{Default value of argument \code{homogeneous}}{
 
-The default value of \code{homogenenous} is TRUE if and only if either
+The default value of \code{homogeneous} is TRUE if and only if either
 of the following is fullfilled:
 \itemize{
  \item \code{worker} is \emph{localhost}
