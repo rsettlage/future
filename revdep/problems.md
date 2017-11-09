@@ -34,91 +34,60 @@ Version: 3.1.1
       ‘sfit’ ‘expectile’ ‘HaarSeg’ ‘mpcbs’
     ```
 
-# brms
+# biotmle
 
-Version: 1.10.0
-
-## In both
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      can be found by typing help('brms'). A more detailed introduction
-      to the package is available through vignette('brms_overview').
-      Run theme_set(theme_default()) to use the default bayesplot theme.
-      > 
-      > test_check("brms")
-      1. Failure: plotting functions don't throw unexpected errors (@tests.plots.R#13) 
-      p <- stanplot(fit, type = "trace", pars = "^b_") produced messages.
-      
-      
-      testthat results ================================================================
-      OK: 1195 SKIPPED: 1 FAILED: 1
-      1. Failure: plotting functions don't throw unexpected errors (@tests.plots.R#13) 
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
-*   R CMD check timed out
-    
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Paul-Christian Bürkner <paul.buerkner@gmail.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
-
-*   checking installed package size ... NOTE
-    ```
-      installed size is  5.3Mb
-      sub-directories of 1Mb or more:
-        R     2.2Mb
-        doc   2.4Mb
-    ```
-
-# doFuture
-
-Version: 0.5.1
+Version: 1.3.0
 
 ## In both
 
 *   checking CRAN incoming feasibility ... NOTE
     ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
+    Maintainer: ‘Nima Hejazi <nhejazi@berkeley.edu>’
     
-    This build time stamp is over a month old.
+    The Description field should not start with the package name,
+      'This package' or similar.
     ```
 
-# fiery
-
-Version: 1.0.0
-
-## In both
-
-*   checking top-level files ... WARNING
+*   checking DESCRIPTION meta-information ... NOTE
     ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://img.shields.io/codecov/c/github/thomasp85/fiery/master.svg
-    TlsExceptionHostPort (HandshakeFailed Error_EOF) "img.shields.io" 443
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Thomas Lin Pedersen <thomasp85@gmail.com>’
-    
-    This build time stamp is over a month old.
+    Author field differs from that derived from Authors@R
+      Author:    ‘Nima Hejazi [aut, cre, cph], Alan Hubbard [aut], Weixin Cai [ctb]’
+      Authors@R: ‘Nima Hejazi [aut, cre, cph] (0000-0002-7127-2789), Alan Hubbard [aut] (0000-0002-3769-0127), Weixin Cai [ctb] (0000-0003-2680-3066)’
     ```
 
 *   checking dependencies in R code ... NOTE
     ```
-    Namespace in Imports field not imported from: ‘desc’
+    Namespaces in Imports field not imported from:
+      ‘DBI’ ‘Matrix’ ‘SuperLearner’ ‘biotmleData’
       All declared Imports should be used.
+    ```
+
+# drake
+
+Version: 4.4.0
+
+## In both
+
+*   checking package dependencies ... ERROR
+    ```
+    Package required but not available: ‘igraph’
+    
+    See section ‘The DESCRIPTION file’ in the ‘Writing R Extensions’
+    manual.
+    ```
+
+# fiery
+
+Version: 1.1.0
+
+## In both
+
+*   checking package dependencies ... ERROR
+    ```
+    Package required but not available: ‘reqres’
+    
+    See section ‘The DESCRIPTION file’ in the ‘Writing R Extensions’
+    manual.
     ```
 
 # future.BatchJobs
@@ -159,7 +128,7 @@ Version: 0.2.0
     Running the tests in ‘tests/testthat.R’ failed.
     Last 13 lines of output:
       testthat results ================================================================
-      OK: 17 SKIPPED: 0 FAILED: 46
+      OK: 5 SKIPPED: 0 FAILED: 46
       1. Error: We can see a project resource (@test_aa_auth.R#16) 
       2. Error: We can set auto project (@test_aa_auth.R#26) 
       3. Error: We can get auto project (@test_aa_auth.R#37) 
@@ -173,6 +142,28 @@ Version: 0.2.0
       
       Error: testthat unit tests failed
       Execution halted
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Mark Edmondson <r@sunholo.com>’
+    
+    This build time stamp is over a month old.
+    ```
+
+# kernelboot
+
+Version: 0.1.2
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Tymoteusz Wolodzko <twolodzko+kernelboot@gmail.com>’
+    
+    The Date field is over a month old.
+    
+    This build time stamp is over a month old.
     ```
 
 # multiApply
@@ -277,7 +268,7 @@ Version: 0.63.0
 
 # QDNAseq
 
-Version: 1.12.0
+Version: 1.14.0
 
 ## In both
 
@@ -299,14 +290,17 @@ Version: 1.12.0
     ‘Quantitative DNA Sequencing for Chromosomal Aberrations’
     
     The Date field is over a month old.
-    
-    This build time stamp is over a month old.
+    ```
+
+*   checking package dependencies ... NOTE
+    ```
+    Package suggested but not available for checking: ‘BSgenome’
     ```
 
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25161634814764134.436.838865427962972207.660.838865426569141207.650.2
+    25313614806329135.236.738865427951038207.660.738865426558655207.650.1
     FINISHED!
     
     Total time:0minutes
@@ -314,7 +308,7 @@ Version: 1.12.0
     Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
       Running 'texi2dvi' on 'QDNAseq.tex' failed.
     LaTeX errors:
-    ! LaTeX Error: File `sectsty.sty' not found.
+    ! LaTeX Error: File `titlesec.sty' not found.
     
     Type X to quit or <RETURN> to proceed,
     or enter new name. (Default extension: sty)
@@ -322,8 +316,8 @@ Version: 1.12.0
     ! Emergency stop.
     <read *> 
              
-    l.38 \sectionfont
-                     {\sffamily\bfseries\color{BiocBlue}\sectionrule{0pt}{0pt}{-...
+    l.95 \makeatletter
+                      ^^M
     !  ==> Fatal error occurred, no output PDF file produced!
     Calls: buildVignettes -> texi2pdf -> texi2dvi
     Execution halted
@@ -344,7 +338,7 @@ Version: 2.11.0
 
 # sperrorest
 
-Version: 2.1.0
+Version: 2.1.1
 
 ## In both
 
@@ -353,21 +347,39 @@ Version: 2.1.0
      ERROR
     Running the tests in ‘tests/testthat.R’ failed.
     Last 13 lines of output:
-      1. Error: sperrorest() when missing factor levels in train data (@test-sperrorest.R#639) 
-      cannot open the connection
-      1: readRDS("/Users/pjs/Servers/GIServer/home/shares/data/LIFE/mod/survey_data/data-clean.rda") %>% 
-             as_tibble() at testthat/test-sperrorest.R:639
-      2: eval(lhs, parent, parent)
-      3: eval(lhs, parent, parent)
-      4: readRDS("/Users/pjs/Servers/GIServer/home/shares/data/LIFE/mod/survey_data/data-clean.rda")
-      5: gzfile(file, "rb")
-      
+      Thu Nov  9 08:19:09 2017 Repetition 2 - Fold 2 - permutation-count: 1 
+      Installing package into '/netapp/home/hb/repositories/future/revdep/checks/sperrorest/new/sperrorest.Rcheck'
+      (as 'lib' is unspecified)
+      Warning: unable to access index for repository http://cran.rstudio.com/src/contrib:
+        cannot open URL 'http://cran.rstudio.com/src/contrib/PACKAGES'
+      Error in file(filename, "r", encoding = encoding) : 
+        cannot open the connection to 'http://bioconductor.org/biocLite.R'
+      Calls: test_check ... lapply -> FUN -> p_install -> try_bioc -> source -> file
+      In addition: Warning messages:
+      1: package 'e1071' is not available (for R version 3.4.2) 
+      2: In file(filename, "r", encoding = encoding) :
+        URL 'http://bioconductor.org/biocLite.R': status was 'Couldn't resolve host name'
       testthat results ================================================================
-      OK: 100 SKIPPED: 7 FAILED: 1
-      1. Error: sperrorest() when missing factor levels in train data (@test-sperrorest.R#639) 
-      
-      Error: testthat unit tests failed
+      OK: 51 SKIPPED: 4 FAILED: 0
       Execution halted
+    ```
+
+*   checking top-level files ... WARNING
+    ```
+    Conversion of ‘README.md’ failed:
+    pandoc: Could not fetch http://www.repostatus.org/badges/latest/inactive.svg
+    FailedConnectionException2 "www.repostatus.org" 80 False getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking re-building of vignette outputs ... WARNING
+    ```
+    Error in re-building vignettes:
+      ...
+    pandoc: Could not fetch https://raw.githubusercontent.com/pat-s/sperrorest/master/inst/figure/resamp-plot.png
+    FailedConnectionException2 "raw.githubusercontent.com" 443 True getAddrInfo: does not exist (Name or service not known)
+    Error: processing vignette 'spatial-modeling-use-case.Rmd' failed with diagnostics:
+    pandoc document conversion failed with error 67
+    Execution halted
     ```
 
 # startR
