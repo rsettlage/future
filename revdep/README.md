@@ -22,13 +22,6 @@
 
 # Revdeps
 
-## Couldn't check (2)
-
-|package  |version |error |warning |note |
-|:--------|:-------|:-----|:-------|:----|
-|brms     |?       |      |        |     |
-|methyvim |?       |      |        |     |
-
 ## All (22)
 
 |package                                                  |version    |error |warning |note |
@@ -36,7 +29,7 @@
 |[aroma.affymetrix](problems.md#aroma.affymetrix)         |3.1.0      |      |        |1    |
 |[aroma.core](problems.md#aroma.core)                     |3.1.1      |      |        |2    |
 |[biotmle](problems.md#biotmle)                           |1.3.0      |      |        |3    |
-|brms                                                     |?          |      |        |     |
+|[brms](problems.md#brms)                                 |1.10.2     |1     |2       |1    |
 |[civis](problems.md#civis)                               |1.1.0      |      |1       |     |
 |doFuture                                                 |0.6.0      |      |        |     |
 |drake                                                    |4.4.0      |      |        |     |
@@ -45,7 +38,7 @@
 |[future.batchtools](problems.md#future.batchtools)       |0.6.0      |      |        |1    |
 |[googleComputeEngineR](problems.md#googlecomputeenginer) |0.2.0      |1     |        |1    |
 |[kernelboot](problems.md#kernelboot)                     |0.1.2      |      |        |1    |
-|methyvim                                                 |?          |      |        |     |
+|[methyvim](problems.md#methyvim)                         |1.0.0      |      |        |1    |
 |[multiApply](problems.md#multiapply)                     |0.0.1      |      |        |1    |
 |[origami](problems.md#origami)                           |0.8.0      |      |        |2    |
 |[pbmcapply](problems.md#pbmcapply)                       |1.2.4      |      |        |1    |

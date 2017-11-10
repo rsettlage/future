@@ -62,6 +62,69 @@ Version: 1.3.0
       All declared Imports should be used.
     ```
 
+# brms
+
+Version: 1.10.2
+
+## In both
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+             19.0926350150152, 18.8945129699237, 18.0108393528174, 19.7701316692212, 18.8782005493563, 
+             19.7940091524462, 19.8237620934549, 18.3328590868642, 21.1433629234624, 21.1875208893366, 
+             19.3973597490138, 20.8449225368382, 20.372121569615, 19.2342599702768, 19.7081018507341, 
+             22.137804868225, 18.2955280576296, 21.0263319602962, 20.7033307617188, 19.3766650536768, 
+             17.2639083603058, 18.8215974211102, 16.8439392831744, 18.3075160998575, 18.4999237944554, 
+             20.0053300186512), .Dim = c(10L, 236L)))
+      11: suggested_package("arm")
+      12: stop("Please install the ", pkg, " package to use this function.", call. = FALSE)
+      
+      testthat results ================================================================
+      OK: 1098 SKIPPED: 1 FAILED: 1
+      1. Error: all S3 methods have reasonable ouputs (@tests.brmsfit-methods.R#411) 
+      
+      Error: testthat unit tests failed
+      Execution halted
+    ```
+
+*   checking top-level files ... WARNING
+    ```
+    Conversion of ‘README.md’ failed:
+    pandoc: Could not fetch https://travis-ci.org/paul-buerkner/brms.svg?branch=master
+    FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking re-building of vignette outputs ... WARNING
+    ```
+    Error in re-building vignettes:
+      ...
+    Loading required package: Rcpp
+    Loading required package: ggplot2
+    Loading 'brms' package (version 1.10.2). Useful instructions
+    can be found by typing help('brms'). A more detailed introduction
+    to the package is available through vignette('brms_overview').
+    Run theme_set(theme_default()) to use the default bayesplot theme.
+    Compiling the C++ model
+    Start sampling
+    Warning in file(file, "rt") :
+      URL 'http://stats.idre.ucla.edu/stat/data/fish.csv': status was 'Couldn't resolve host name'
+    Quitting from lines 85-87 (brms_distreg.Rmd) 
+    Error: processing vignette 'brms_distreg.Rmd' failed with diagnostics:
+    cannot open the connection to 'http://stats.idre.ucla.edu/stat/data/fish.csv'
+    Execution halted
+    ```
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is  5.3Mb
+      sub-directories of 1Mb or more:
+        R     2.2Mb
+        doc   2.4Mb
+    ```
+
 # civis
 
 Version: 1.1.0
@@ -168,6 +231,32 @@ Version: 0.1.2
     The Date field is over a month old.
     
     This build time stamp is over a month old.
+    ```
+
+# methyvim
+
+Version: 1.0.0
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Nima Hejazi <nhejazi@berkeley.edu>’
+    
+    Uses the superseded package: ‘snow’
+    
+    Found the following (possibly) invalid URLs:
+      URL: https://cran.r-project.org/web/packages/drtmle/index.html
+        From: inst/doc/using_methyvim.html
+        CRAN URL not in canonical form
+      URL: https://cran.r-project.org/web/packages/randomForest/index.html
+        From: inst/doc/using_methyvim.html
+        CRAN URL not in canonical form
+      The canonical URL of the CRAN page for a package is 
+        https://CRAN.R-project.org/package=pkgname
+    
+    The Description field should not start with the package name,
+      'This package' or similar.
     ```
 
 # multiApply
