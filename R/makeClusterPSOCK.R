@@ -184,6 +184,8 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' Furthermore, when running \R from RStudio on Windows, the \command{ssh}
 #' client that is distributed with RStudio will be used as a fallback if
 #' neither of the above two commands are available on the \code{PATH}.
+#' Note that on Windows 10, there is a beta version of OpenSSH that can
+#' be enabled in the Windows Settings, cf. \url{https://www.thomasmaurer.ch/2017/11/install-ssh-on-windows-10-as-optional-feature/}.
 #' If no SSH-client is found, an informative error message is produced.
 #' It is also possible to specify the absolute path to the SSH client.  To do
 #' this for PuTTY, specify the absolute path in the first element and option
@@ -550,11 +552,11 @@ find_rshcmd <- function(must_work = TRUE) {
     }
   }
   
-  cmds_checked <- unlist(lapply(cmds, FUN = function(x) x[1]))
+  cmds_checked <- unlist(lapply(cmd_calls, FUN = function(x) x[1]))
   msg <- sprintf("Failed to locate a default SSH client (checked: %s). Please specify one via argument 'rshcmd'.", paste(sQuote(cmds_checked), collapse = ", ")) #nolint
   if (must_work) stop(msg)
 
-  cmd <- cmds[[1]]
+  cmd <- cmd_calls[[1]]
   msg <- sprintf("%s Will use %s.", msg, sQuote(paste(cmd, collapse = " ")))
   warning(msg)
   cmd
