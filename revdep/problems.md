@@ -34,6 +34,62 @@ Version: 3.1.1
       ‘sfit’ ‘expectile’ ‘HaarSeg’ ‘mpcbs’
     ```
 
+# batchtools
+
+Version: 0.9.7
+
+## In both
+
+*   checking top-level files ... WARNING
+    ```
+    Conversion of ‘README.md’ failed:
+    pandoc: Could not fetch http://joss.theoj.org/papers/10.21105/joss.00135/status.svg
+    FailedConnectionException2 "joss.theoj.org" 80 False getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking Rd cross-references ... WARNING
+    ```
+    Unknown package ‘Rmpi’ in Rd xrefs
+    ```
+
+*   checking re-building of vignette outputs ... WARNING
+    ```
+    ...
+    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c45a6ea3e8' using cluster functions 'Interactive'
+    No configuration file found
+    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c4733d1499' using cluster functions 'Interactive'
+    No configuration file found
+    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c43b74414b' using cluster functions 'Interactive'
+    Error in (function (value)  : Ooops.
+    ! LaTeX Error: File `framed.sty' not found.
+    
+    Type X to quit or <RETURN> to proceed,
+    or enter new name. (Default extension: sty)
+    
+    Enter file name: 
+    ! Emergency stop.
+    <read *> 
+             
+    l.42 \definecolor
+    
+    pandoc: Error producing PDF
+    Error: processing vignette 'batchtools.Rmd' failed with diagnostics:
+    pandoc document conversion failed with error 43
+    Execution halted
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Michel Lang <michellang@gmail.com>’
+    
+    Uses the superseded package: ‘snow’
+    ```
+
+*   checking package dependencies ... NOTE
+    ```
+    Package suggested but not available for checking: ‘doMPI’
+    ```
+
 # biotmle
 
 Version: 1.3.0
@@ -46,6 +102,8 @@ Version: 1.3.0
     
     The Description field should not start with the package name,
       'This package' or similar.
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking DESCRIPTION meta-information ... NOTE
@@ -79,10 +137,10 @@ Version: 1.10.2
              22.137804868225, 18.2955280576296, 21.0263319602962, 20.7033307617188, 19.3766650536768, 
              17.2639083603058, 18.8215974211102, 16.8439392831744, 18.3075160998575, 18.4999237944554, 
              20.0053300186512), .Dim = c(10L, 236L)))
-      11: suggested_package("arm")
-      12: stop("Please install the ", pkg, " package to use this function.", call. = FALSE)
+      9: suggested_package("arm")
+      10: stop("Please install the ", pkg, " package to use this function.", call. = FALSE)
       
-      testthat results ================================================================
+      ══ testthat results  ═══════════════════════════════════════════════════════════
       OK: 1098 SKIPPED: 1 FAILED: 1
       1. Error: all S3 methods have reasonable ouputs (@tests.brmsfit-methods.R#411) 
       
@@ -97,24 +155,13 @@ Version: 1.10.2
     FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
     ```
 
-*   checking re-building of vignette outputs ... WARNING
+*   checking CRAN incoming feasibility ... NOTE
     ```
-    Error in re-building vignettes:
-      ...
-    Loading required package: Rcpp
-    Loading required package: ggplot2
-    Loading 'brms' package (version 1.10.2). Useful instructions
-    can be found by typing help('brms'). A more detailed introduction
-    to the package is available through vignette('brms_overview').
-    Run theme_set(theme_default()) to use the default bayesplot theme.
-    Compiling the C++ model
-    Start sampling
-    Warning in file(file, "rt") :
-      URL 'http://stats.idre.ucla.edu/stat/data/fish.csv': status was 'Couldn't resolve host name'
-    Quitting from lines 85-87 (brms_distreg.Rmd) 
-    Error: processing vignette 'brms_distreg.Rmd' failed with diagnostics:
-    cannot open the connection to 'http://stats.idre.ucla.edu/stat/data/fish.csv'
-    Execution halted
+    Maintainer: ‘Paul-Christian Bürkner <paul.buerkner@gmail.com>’
+    
+    The Date field is over a month old.
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking installed package size ... NOTE
@@ -127,7 +174,7 @@ Version: 1.10.2
 
 # civis
 
-Version: 1.1.0
+Version: 1.1.1
 
 ## In both
 
@@ -136,6 +183,32 @@ Version: 1.1.0
     Conversion of ‘README.md’ failed:
     pandoc: Could not fetch https://travis-ci.org/civisanalytics/civis-r.svg?branch=master
     FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+# doFuture
+
+Version: 0.6.0
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
+    
+    This build time stamp is over a month old.
+    ```
+
+# drake
+
+Version: 4.4.0
+
+## In both
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘William Michael Landau <will.landau@lilly.com>’
+    
+    This build time stamp is over a month old.
     ```
 
 # fiery
@@ -149,6 +222,15 @@ Version: 1.1.0
     Conversion of ‘README.md’ failed:
     pandoc: Could not fetch https://travis-ci.org/thomasp85/fiery.svg?branch=master
     FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Thomas Lin Pedersen <thomasp85@gmail.com>’
+    
+    The Date field is over a month old.
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking dependencies in R code ... NOTE
@@ -189,28 +271,6 @@ Version: 0.2.0
 
 ## In both
 
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      testthat results ================================================================
-      OK: 5 SKIPPED: 0 FAILED: 46
-      1. Error: We can see a project resource (@test_aa_auth.R#16) 
-      2. Error: We can set auto project (@test_aa_auth.R#26) 
-      3. Error: We can get auto project (@test_aa_auth.R#37) 
-      4. Error: We can list networks (@test_aa_auth.R#70) 
-      5. Error: We can get a network (@test_aa_auth.R#79) 
-      6. Error: We can make a container VM (@test_bb_create_vm.R#7) 
-      7. Error: We can make a VM with metadata (@test_bb_create_vm.R#24) 
-      8. Error: We can make a template VM (@test_bb_create_vm.R#41) 
-      9. Error: We can make a VM with custom disk size (@test_bb_create_vm.R#57) 
-      1. ...
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Mark Edmondson <r@sunholo.com>’
@@ -224,6 +284,22 @@ Version: 0.1.2
 
 ## In both
 
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in ‘tests/test_parallel.R’ failed.
+    Complete output:
+      > 
+      > library("kernelboot")
+      > 
+      > # simply check if it fails
+      > 
+      > stopifnot( kernelboot(mtcars, function(data) coef(lm(mpg ~ disp + hp + drat, data = data)),
+      +                       R = 10, parallel = TRUE)$param$parallel )
+      Error: kernelboot(mtcars, function(data) coef(lm(mpg ~ disp + hp + drat,  .... is not TRUE
+      Execution halted
+    ```
+
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Tymoteusz Wolodzko <twolodzko+kernelboot@gmail.com>’
@@ -231,6 +307,26 @@ Version: 0.1.2
     The Date field is over a month old.
     
     This build time stamp is over a month old.
+    ```
+
+# MetamapsDB
+
+Version: 0.0.2
+
+## In both
+
+*   checking top-level files ... WARNING
+    ```
+    Conversion of ‘README.md’ failed:
+    pandoc: Could not fetch https://zenodo.org/badge/19045/etheleon/metamaps.svg
+    FailedConnectionException2 "zenodo.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespaces in Imports field not imported from:
+      ‘Matrix’ ‘shiny’
+      All declared Imports should be used.
     ```
 
 # methyvim
@@ -257,6 +353,8 @@ Version: 1.0.0
     
     The Description field should not start with the package name,
       'This package' or similar.
+    
+    This build time stamp is over a month old.
     ```
 
 # multiApply
@@ -306,7 +404,7 @@ Version: 1.2.4
 
 # penaltyLearning
 
-Version: 2017.07.11
+Version: 2017.12.08
 
 ## In both
 
@@ -314,34 +412,8 @@ Version: 2017.07.11
     ```
     Maintainer: ‘Toby Dylan Hocking <toby.hocking@r-project.org>’
     
-    Version contains leading zeroes (2017.07.11)
-    Version contains large components (2017.07.11)
-    
-    This build time stamp is over a month old.
-    ```
-
-*   checking re-building of vignette outputs ... NOTE
-    ```
-    Error in re-building vignettes:
-      ...
-    Warning: `panel.margin` is deprecated. Please use `panel.spacing` property instead
-    Warning: `panel.margin` is deprecated. Please use `panel.spacing` property instead
-    Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
-      Running 'texi2dvi' on 'Definition.tex' failed.
-    LaTeX errors:
-    ! LaTeX Error: File `fullpage.sty' not found.
-    
-    Type X to quit or <RETURN> to proceed,
-    or enter new name. (Default extension: sty)
-    
-    ! Emergency stop.
-    <read *> 
-             
-    l.4 \usepackage
-                   {verbatim}^^M
-    !  ==> Fatal error occurred, no output PDF file produced!
-    Calls: buildVignettes -> texi2pdf -> texi2dvi
-    Execution halted
+    Version contains leading zeroes (2017.12.08)
+    Version contains large components (2017.12.08)
     ```
 
 # PSCBS
@@ -383,12 +455,14 @@ Version: 1.14.0
     ‘Quantitative DNA Sequencing for Chromosomal Aberrations’
     
     The Date field is over a month old.
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25313614806329135.236.738865427951038207.660.738865426558655207.650.1
+    25321414807983135.336.738865427951038207.660.738865426559080207.650.1
     FINISHED!
     
     Total time:0minutes
@@ -424,6 +498,39 @@ Version: 2.11.0
     This build time stamp is over a month old.
     ```
 
+# robotstxt
+
+Version: 0.5.2
+
+## In both
+
+*   checking top-level files ... WARNING
+    ```
+    Conversion of ‘README.md’ failed:
+    pandoc: Could not fetch https://api.travis-ci.org/ropenscilabs/robotstxt.svg?branch=master
+    FailedConnectionException2 "api.travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking re-building of vignette outputs ... WARNING
+    ```
+    Error in re-building vignettes:
+      ...
+    
+     google.com                      Quitting from lines 48-51 (using_robotstxt.Rmd) 
+    Error: processing vignette 'using_robotstxt.Rmd' failed with diagnostics:
+    Could not resolve host: google.com; Name or service not known
+    Execution halted
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Peter Meissner <retep.meissner@gmail.com>’
+    
+    The Date field is over a month old.
+    
+    This build time stamp is over a month old.
+    ```
+
 # sperrorest
 
 Version: 2.1.1
@@ -435,20 +542,20 @@ Version: 2.1.1
      ERROR
     Running the tests in ‘tests/testthat.R’ failed.
     Last 13 lines of output:
-      Thu Nov  9 10:27:03 2017 Repetition 2 - Fold 2 - permutation-count: 1 
-      Installing package into '/netapp/home/hb/repositories/future/revdep/checks/sperrorest/new/sperrorest.Rcheck'
-      (as 'lib' is unspecified)
-      Warning: unable to access index for repository http://cran.rstudio.com/src/contrib:
-        cannot open URL 'http://cran.rstudio.com/src/contrib/PACKAGES'
-      Error in file(filename, "r", encoding = encoding) : 
-        cannot open the connection to 'http://bioconductor.org/biocLite.R'
-      Calls: test_check ... lapply -> FUN -> p_install -> try_bioc -> source -> file
-      In addition: Warning messages:
-      1: package 'e1071' is not available (for R version 3.4.2) 
-      2: In file(filename, "r", encoding = encoding) :
-        URL 'http://bioconductor.org/biocLite.R': status was 'Couldn't resolve host name'
-      testthat results ================================================================
-      OK: 51 SKIPPED: 4 FAILED: 0
+             magrittr, e1071) at testthat/test-sperrorest.R:5
+      2: sapply(packages, p_load_single, install = install)
+      3: lapply(X = X, FUN = FUN, ...)
+      4: FUN(X[[i]], ...)
+      5: p_install(package, character.only = TRUE, ...)
+      6: try_bioc(package)
+      7: source("http://bioconductor.org/biocLite.R")
+      8: file(filename, "r", encoding = encoding)
+      
+      ══ testthat results  ═══════════════════════════════════════════════════════════
+      OK: 10 SKIPPED: 33 FAILED: 1
+      1. Error: (unknown) (@test-sperrorest.R#5) 
+      
+      Error: testthat unit tests failed
       Execution halted
     ```
 
@@ -468,6 +575,15 @@ Version: 2.1.1
     Error: processing vignette 'spatial-modeling-use-case.Rmd' failed with diagnostics:
     pandoc document conversion failed with error 67
     Execution halted
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Alexander Brenning <alexander.brenning@uni-jena.de>’
+    
+    The Date field is over a month old.
+    
+    This build time stamp is over a month old.
     ```
 
 # startR
