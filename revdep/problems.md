@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # aroma.affymetrix
 
 Version: 3.1.0
@@ -13,12 +14,15 @@ Version: 3.1.0
     This build time stamp is over a month old.
     ```
 
+=======
+>>>>>>> develop
 # aroma.core
 
 Version: 3.1.1
 
 ## In both
 
+<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
@@ -28,12 +32,15 @@ Version: 3.1.1
     This build time stamp is over a month old.
     ```
 
+=======
+>>>>>>> develop
 *   checking package dependencies ... NOTE
     ```
     Packages suggested but not available for checking:
       ‘sfit’ ‘expectile’ ‘HaarSeg’ ‘mpcbs’
     ```
 
+<<<<<<< HEAD
 # batchtools
 
 Version: 0.9.7
@@ -165,13 +172,22 @@ Version: 1.10.2
     ```
 
 *   checking installed package size ... NOTE
+=======
+# biotmle
+
+Version: 1.3.0
+
+## In both
+
+*   checking dependencies in R code ... NOTE
+>>>>>>> develop
     ```
-      installed size is  5.3Mb
-      sub-directories of 1Mb or more:
-        R     2.2Mb
-        doc   2.4Mb
+    Namespaces in Imports field not imported from:
+      ‘DBI’ ‘Matrix’ ‘SuperLearner’ ‘biotmleData’
+      All declared Imports should be used.
     ```
 
+<<<<<<< HEAD
 # civis
 
 Version: 1.1.1
@@ -196,10 +212,25 @@ Version: 0.6.0
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
     
     This build time stamp is over a month old.
+=======
+# brms
+
+Version: 2.0.1
+
+## In both
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is  5.4Mb
+      sub-directories of 1Mb or more:
+        R     2.2Mb
+        doc   2.4Mb
+>>>>>>> develop
     ```
 
 # drake
 
+<<<<<<< HEAD
 Version: 4.4.0
 
 ## In both
@@ -231,6 +262,32 @@ Version: 1.1.0
     The Date field is over a month old.
     
     This build time stamp is over a month old.
+=======
+Version: 1.1.0
+
+## In both
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+             onWSOpen = private$websocket_logic))
+      10: stop("Failed to create server")
+      
+      ══ testthat results  ═══════════════════════════════════════════════════════════
+      OK: 236 SKIPPED: 0 FAILED: 7
+      1. Error: life cycle events get fired (@test-Fire.R#168) 
+      2. Error: errors in start and resume gets caught (@test-Fire.R#288) 
+      3. Error: futures can be added and called (@test-Fire.R#317) 
+      4. Error: ignite is blocked during run (@test-Fire.R#404) 
+      5. Error: external triggers are fired (@test-Fire.R#424) 
+      6. Error: showcase opens a browser (@test-Fire.R#453) 
+      7. Error: is_running works (@test-Fire.R#529) 
+      
+      Error: testthat unit tests failed
+      Execution halted
+>>>>>>> develop
     ```
 
 *   checking dependencies in R code ... NOTE
@@ -239,6 +296,7 @@ Version: 1.1.0
       All declared Imports should be used.
     ```
 
+<<<<<<< HEAD
 # future.BatchJobs
 
 Version: 0.15.0
@@ -253,11 +311,15 @@ Version: 0.15.0
     ```
 
 # future.batchtools
+=======
+# MetamapsDB
+>>>>>>> develop
 
-Version: 0.6.0
+Version: 0.0.2
 
 ## In both
 
+<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
@@ -368,6 +430,13 @@ Version: 0.0.1
     Maintainer: ‘Alasdair Hunter <alasdair.hunter@bsc.es>’
     
     This build time stamp is over a month old.
+=======
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespaces in Imports field not imported from:
+      ‘Matrix’ ‘shiny’
+      All declared Imports should be used.
+>>>>>>> develop
     ```
 
 # origami
@@ -376,6 +445,7 @@ Version: 0.8.0
 
 ## In both
 
+<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Jeremy Coyle <jeremyrcoyle@gmail.com>’
@@ -383,12 +453,15 @@ Version: 0.8.0
     This build time stamp is over a month old.
     ```
 
+=======
+>>>>>>> develop
 *   checking dependencies in R code ... NOTE
     ```
     Namespace in Imports field not imported from: ‘methods’
       All declared Imports should be used.
     ```
 
+<<<<<<< HEAD
 # pbmcapply
 
 Version: 1.2.4
@@ -431,6 +504,8 @@ Version: 0.63.0
     This build time stamp is over a month old.
     ```
 
+=======
+>>>>>>> develop
 # QDNAseq
 
 Version: 1.14.0
@@ -446,6 +521,7 @@ Version: 1.14.0
     Extensions’ manual.
     ```
 
+<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Daoud Sie <d.sie@vumc.nl>’
@@ -599,3 +675,5 @@ Version: 0.0.1
     This build time stamp is over a month old.
     ```
 
+=======
+>>>>>>> develop

@@ -211,6 +211,32 @@ for (strategy in supportedStrategies()) {
   print(y)
   stopifnot(all.equal(y, v0))
 
+  
+  message("- Globals manually specified as named list - also with '...' ...")
+  x <- 1:10
+  y_truth <- x[2:3]
+  str(y_truth)
+  
+  ## Make sure it's possible to specify '...' as a global
+  sub <- function(x, ...) value(future(x[...], globals = c("x", "...")))
+  y <- sub(x, 2:3)
+  str(y)
+  stopifnot(identical(y, y_truth))
+
+  ## Make sure it's possible to specify '...' as a global (not just last)
+  ## Requires globals (> 0.11.0)
+  sub <- function(x, ...) value(future(x[...], globals = c("...", "x")))
+  if (packageVersion("globals") > "0.11.0")
+    y <- sub(x, 2:3)
+  str(y)
+  stopifnot(identical(y, y_truth))
+  
+  ## And if '...' is forgotten, it may give an error
+  sub <- function(x, ...) value(future(x[...], globals = "x"))
+  y <- tryCatch(sub(x, 2:3), error = identity)
+  str(y)
+  stopifnot((strategy %in% c("multisession") && inherits(y, "FutureError")) || identical(y, y_truth))
+  
   message(sprintf("- Strategy: %s ... DONE", strategy))
 }
 
