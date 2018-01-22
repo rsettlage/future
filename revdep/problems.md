@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # aroma.affymetrix
 
 Version: 3.1.0
@@ -14,15 +13,12 @@ Version: 3.1.0
     This build time stamp is over a month old.
     ```
 
-=======
->>>>>>> develop
 # aroma.core
 
 Version: 3.1.1
 
 ## In both
 
-<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
@@ -32,18 +28,15 @@ Version: 3.1.1
     This build time stamp is over a month old.
     ```
 
-=======
->>>>>>> develop
 *   checking package dependencies ... NOTE
     ```
     Packages suggested but not available for checking:
       ‘sfit’ ‘expectile’ ‘HaarSeg’ ‘mpcbs’
     ```
 
-<<<<<<< HEAD
 # batchtools
 
-Version: 0.9.7
+Version: 0.9.8
 
 ## In both
 
@@ -62,11 +55,11 @@ Version: 0.9.7
 *   checking re-building of vignette outputs ... WARNING
     ```
     ...
-    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c45a6ea3e8' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6df32ee14' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c4733d1499' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6d49451c51' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/Rtmpgd6sE8/registry268c43b74414b' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6d57dc95aa' using cluster functions 'Interactive'
     Error in (function (value)  : Ooops.
     ! LaTeX Error: File `framed.sty' not found.
     
@@ -90,6 +83,8 @@ Version: 0.9.7
     Maintainer: ‘Michel Lang <michellang@gmail.com>’
     
     Uses the superseded package: ‘snow’
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking package dependencies ... NOTE
@@ -129,31 +124,9 @@ Version: 1.3.0
 
 # brms
 
-Version: 1.10.2
+Version: 2.0.1
 
 ## In both
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-             19.0926350150152, 18.8945129699237, 18.0108393528174, 19.7701316692212, 18.8782005493563, 
-             19.7940091524462, 19.8237620934549, 18.3328590868642, 21.1433629234624, 21.1875208893366, 
-             19.3973597490138, 20.8449225368382, 20.372121569615, 19.2342599702768, 19.7081018507341, 
-             22.137804868225, 18.2955280576296, 21.0263319602962, 20.7033307617188, 19.3766650536768, 
-             17.2639083603058, 18.8215974211102, 16.8439392831744, 18.3075160998575, 18.4999237944554, 
-             20.0053300186512), .Dim = c(10L, 236L)))
-      9: suggested_package("arm")
-      10: stop("Please install the ", pkg, " package to use this function.", call. = FALSE)
-      
-      ══ testthat results  ═══════════════════════════════════════════════════════════
-      OK: 1098 SKIPPED: 1 FAILED: 1
-      1. Error: all S3 methods have reasonable ouputs (@tests.brmsfit-methods.R#411) 
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
 
 *   checking top-level files ... WARNING
     ```
@@ -167,27 +140,16 @@ Version: 1.10.2
     Maintainer: ‘Paul-Christian Bürkner <paul.buerkner@gmail.com>’
     
     The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
 *   checking installed package size ... NOTE
-=======
-# biotmle
-
-Version: 1.3.0
-
-## In both
-
-*   checking dependencies in R code ... NOTE
->>>>>>> develop
     ```
-    Namespaces in Imports field not imported from:
-      ‘DBI’ ‘Matrix’ ‘SuperLearner’ ‘biotmleData’
-      All declared Imports should be used.
+      installed size is  5.4Mb
+      sub-directories of 1Mb or more:
+        R     2.2Mb
+        doc   2.4Mb
     ```
 
-<<<<<<< HEAD
 # civis
 
 Version: 1.1.1
@@ -201,6 +163,13 @@ Version: 1.1.1
     FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
     ```
 
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Patrick Miller <pmiller@civisanalytics.com>’
+    
+    This build time stamp is over a month old.
+    ```
+
 # doFuture
 
 Version: 0.6.0
@@ -212,25 +181,10 @@ Version: 0.6.0
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
     
     This build time stamp is over a month old.
-=======
-# brms
-
-Version: 2.0.1
-
-## In both
-
-*   checking installed package size ... NOTE
-    ```
-      installed size is  5.4Mb
-      sub-directories of 1Mb or more:
-        R     2.2Mb
-        doc   2.4Mb
->>>>>>> develop
     ```
 
 # drake
 
-<<<<<<< HEAD
 Version: 4.4.0
 
 ## In both
@@ -262,32 +216,6 @@ Version: 1.1.0
     The Date field is over a month old.
     
     This build time stamp is over a month old.
-=======
-Version: 1.1.0
-
-## In both
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-             onWSOpen = private$websocket_logic))
-      10: stop("Failed to create server")
-      
-      ══ testthat results  ═══════════════════════════════════════════════════════════
-      OK: 236 SKIPPED: 0 FAILED: 7
-      1. Error: life cycle events get fired (@test-Fire.R#168) 
-      2. Error: errors in start and resume gets caught (@test-Fire.R#288) 
-      3. Error: futures can be added and called (@test-Fire.R#317) 
-      4. Error: ignite is blocked during run (@test-Fire.R#404) 
-      5. Error: external triggers are fired (@test-Fire.R#424) 
-      6. Error: showcase opens a browser (@test-Fire.R#453) 
-      7. Error: is_running works (@test-Fire.R#529) 
-      
-      Error: testthat unit tests failed
-      Execution halted
->>>>>>> develop
     ```
 
 *   checking dependencies in R code ... NOTE
@@ -296,7 +224,6 @@ Version: 1.1.0
       All declared Imports should be used.
     ```
 
-<<<<<<< HEAD
 # future.BatchJobs
 
 Version: 0.15.0
@@ -311,15 +238,11 @@ Version: 0.15.0
     ```
 
 # future.batchtools
-=======
-# MetamapsDB
->>>>>>> develop
 
-Version: 0.0.2
+Version: 0.6.0
 
 ## In both
 
-<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
@@ -342,25 +265,9 @@ Version: 0.2.0
 
 # kernelboot
 
-Version: 0.1.2
+Version: 0.1.3
 
 ## In both
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/test_parallel.R’ failed.
-    Complete output:
-      > 
-      > library("kernelboot")
-      > 
-      > # simply check if it fails
-      > 
-      > stopifnot( kernelboot(mtcars, function(data) coef(lm(mpg ~ disp + hp + drat, data = data)),
-      +                       R = 10, parallel = TRUE)$param$parallel )
-      Error: kernelboot(mtcars, function(data) coef(lm(mpg ~ disp + hp + drat,  .... is not TRUE
-      Execution halted
-    ```
 
 *   checking CRAN incoming feasibility ... NOTE
     ```
@@ -382,6 +289,13 @@ Version: 0.0.2
     Conversion of ‘README.md’ failed:
     pandoc: Could not fetch https://zenodo.org/badge/19045/etheleon/metamaps.svg
     FailedConnectionException2 "zenodo.org" 443 True getAddrInfo: does not exist (Name or service not known)
+    ```
+
+*   checking CRAN incoming feasibility ... NOTE
+    ```
+    Maintainer: ‘Wesley GOI <wesley@bic.nus.edu.sg>’
+    
+    This build time stamp is over a month old.
     ```
 
 *   checking dependencies in R code ... NOTE
@@ -430,13 +344,6 @@ Version: 0.0.1
     Maintainer: ‘Alasdair Hunter <alasdair.hunter@bsc.es>’
     
     This build time stamp is over a month old.
-=======
-*   checking dependencies in R code ... NOTE
-    ```
-    Namespaces in Imports field not imported from:
-      ‘Matrix’ ‘shiny’
-      All declared Imports should be used.
->>>>>>> develop
     ```
 
 # origami
@@ -445,7 +352,6 @@ Version: 0.8.0
 
 ## In both
 
-<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Jeremy Coyle <jeremyrcoyle@gmail.com>’
@@ -453,15 +359,12 @@ Version: 0.8.0
     This build time stamp is over a month old.
     ```
 
-=======
->>>>>>> develop
 *   checking dependencies in R code ... NOTE
     ```
     Namespace in Imports field not imported from: ‘methods’
       All declared Imports should be used.
     ```
 
-<<<<<<< HEAD
 # pbmcapply
 
 Version: 1.2.4
@@ -487,6 +390,8 @@ Version: 2017.12.08
     
     Version contains leading zeroes (2017.12.08)
     Version contains large components (2017.12.08)
+    
+    This build time stamp is over a month old.
     ```
 
 # PSCBS
@@ -504,8 +409,6 @@ Version: 0.63.0
     This build time stamp is over a month old.
     ```
 
-=======
->>>>>>> develop
 # QDNAseq
 
 Version: 1.14.0
@@ -521,7 +424,6 @@ Version: 1.14.0
     Extensions’ manual.
     ```
 
-<<<<<<< HEAD
 *   checking CRAN incoming feasibility ... NOTE
     ```
     Maintainer: ‘Daoud Sie <d.sie@vumc.nl>’
@@ -538,7 +440,7 @@ Version: 1.14.0
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25321414807983135.336.738865427951038207.660.738865426559080207.650.1
+    25323624808432135.336.738865427951052207.660.738865426552843207.650
     FINISHED!
     
     Total time:0minutes
@@ -675,5 +577,3 @@ Version: 0.0.1
     This build time stamp is over a month old.
     ```
 
-=======
->>>>>>> develop
