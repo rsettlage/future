@@ -1,7 +1,11 @@
 Package: future
 ===============
 
-Version: 1.6.2-9000 [2018-01-15]
+Version: 1.6.2-9000 [2018-02-08]
+
+SIGNIFICANT CHANGES:
+
+ o future_lapply() has moved to the future.apply package available on CRAN.
 
 NEW FEATURES:
 
@@ -16,12 +20,21 @@ NEW FEATURES:
    plan(multiprocess), will use the SSH client distributed with RStudio as
    a fallback if neither 'ssh' nor 'plink' is available on the system PATH.
 
-PERFORMANCE:
+ o Now plan() makes sure that nbrOfWorkers() will work for the new strategy.
+   This will help catch mistakes such as plan(cluster, workers = cl) where
+   'cl' is a basic R list rather than a 'cluster' list early on.
 
- o future_lapply(x, ...) is now much faster and more memory efficient for large
-   'x' vectors because it uses an internal recursive divide'n'conquer fold()
-   function that is more efficient (memory and speed) version of
-   base::Reduce(f, x), especially when length(x) is large.
+ o Added %packages% to explicitly control packages to be attached when a
+   future is resolved, e.g. y %<-% { DT[2] } %packages% "data.table".
+   Note, this is only needed in cases where the automatic identification of
+   global and package dependencies is not sufficient.
+
+ o Added condition classes FutureCondition, FutureMessage, FutureWarning, and
+   FutureError representing conditions that occur while a future is setup,
+   launched, queried, or retrieved.  They do *not* represent conditions that
+   occur while evaluating the future expression.  For those conditions, new
+   classes FutureEvaluationCondition, FutureEvaulationMessage,
+   FutureEvaluationWarning, and FutureEvaluationError exists.
 
 DOCUMENTATION:
 
@@ -29,7 +42,24 @@ DOCUMENTATION:
    future framework fails to identify a variable as being global because it
    is only so conditionally, e.g. 'if (runif(1) < 1/2) x <- 0; y <- 2 * x'.
 
+BETA FEATURES:
+
+ o Added mechanism for detecting globals that _may_ not be exportable to an
+   external R process (a "worker").  Typically, globals that carry connections
+   and external pointers ("externalptr") can not be exported, but there are
+   exceptions.  By setting options 'future.globals.onReference' to "warning",
+   a warning is produced informing the user about potential problems.  If
+   "error", an error is produced.  Because there might be false positive, the
+   default is "ignore", which will cause above scans to be skipped.  If there
+   are non-exportable globals and these tests are skipped, a run-time error
+   may be produced only when the future expression is evaluated.
+
 BUG FIXES:
+
+ o The total size of global variables was overestimated, and dramatically so
+   if defined in the global environment and there were are large objects there
+   too.  This would sometimes result in a false error saying that the total
+   size is larger than the allowed limit.
 
  o An assignment such as 'x <- x + 1' where the left-hand side (LHS) 'x' is a
    global failed to identify 'x' as a global because the right-hand side (RHS)
@@ -55,7 +85,13 @@ DEPRECATED AND DEFUNCT:
 
  o Dropped defunct arguments 'cluster' and 'maxCores'; use 'workers' instead.
 
- 
+ o In previous version of the future package the FutureError class was used
+   to represent both orchestration errors (now FutureError) and evaluation
+   errors (now FutureEvaluationError).  Any usage of class FutureError for
+   the latter type of errors is deprecated and should be updated to
+   FutureEvaluationError.
+
+
 Version: 1.6.2 [2017-10-16]
 
 NEW FEATURES:

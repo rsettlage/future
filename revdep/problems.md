@@ -55,11 +55,11 @@ Version: 0.9.8
 *   checking re-building of vignette outputs ... WARNING
     ```
     ...
-    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6df32ee14' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/Rtmp3BgFfE/registry73776f819424' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6d49451c51' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/Rtmp3BgFfE/registry73773e4c32b4' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/RtmpFNFkfn/registry15c6d57dc95aa' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/Rtmp3BgFfE/registry737742f4c707' using cluster functions 'Interactive'
     Error in (function (value)  : Ooops.
     ! LaTeX Error: File `framed.sty' not found.
     
@@ -124,7 +124,7 @@ Version: 1.3.0
 
 # brms
 
-Version: 2.0.1
+Version: 2.1.0
 
 ## In both
 
@@ -135,11 +135,25 @@ Version: 2.0.1
     FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
     ```
 
-*   checking CRAN incoming feasibility ... NOTE
+*   checking re-building of vignette outputs ... WARNING
     ```
-    Maintainer: ‘Paul-Christian Bürkner <paul.buerkner@gmail.com>’
+    Error in re-building vignettes:
+      ...
+    Error: processing vignette 'brms_multilevel.ltx' failed with diagnostics:
+    Running 'texi2dvi' on 'brms_multilevel.ltx' failed.
+    LaTeX errors:
+    ! LaTeX Error: File `inconsolata.sty' not found.
     
-    The Date field is over a month old.
+    Type X to quit or <RETURN> to proceed,
+    or enter new name. (Default extension: sty)
+    
+    ! Emergency stop.
+    <read *> 
+             
+    l.47 \RequirePackage
+                        [T1]{fontenc}^^M
+    !  ==> Fatal error occurred, no output PDF file produced!
+    Execution halted
     ```
 
 *   checking installed package size ... NOTE
@@ -147,27 +161,7 @@ Version: 2.0.1
       installed size is  5.4Mb
       sub-directories of 1Mb or more:
         R     2.2Mb
-        doc   2.4Mb
-    ```
-
-# civis
-
-Version: 1.1.1
-
-## In both
-
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://travis-ci.org/civisanalytics/civis-r.svg?branch=master
-    FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Patrick Miller <pmiller@civisanalytics.com>’
-    
-    This build time stamp is over a month old.
+        doc   2.3Mb
     ```
 
 # doFuture
@@ -185,15 +179,26 @@ Version: 0.6.0
 
 # drake
 
-Version: 4.4.0
+Version: 5.0.0
 
 ## In both
 
-*   checking CRAN incoming feasibility ... NOTE
+*   checking re-building of vignette outputs ... WARNING
     ```
-    Maintainer: ‘William Michael Landau <will.landau@lilly.com>’
-    
-    This build time stamp is over a month old.
+    Error in re-building vignettes:
+      ...
+    Error building target my_target: unusual error
+    Quitting from lines 17-25 (example-gsp.Rmd) 
+    Error: processing vignette 'example-gsp.Rmd' failed with diagnostics:
+    package 'Ecfun' could not be loaded
+    Execution halted
+    ```
+
+*   checking DESCRIPTION meta-information ... NOTE
+    ```
+    Authors@R field gives persons with non-standard roles:
+      Ben Marwick <bmarwick@uw.edu> [rev]: rev
+      Peter Slaughter <slaughter@nceas.ucsb.edu> [rev]: rev
     ```
 
 # fiery
@@ -201,22 +206,6 @@ Version: 4.4.0
 Version: 1.1.0
 
 ## In both
-
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://travis-ci.org/thomasp85/fiery.svg?branch=master
-    FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Thomas Lin Pedersen <thomasp85@gmail.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
 
 *   checking dependencies in R code ... NOTE
     ```
@@ -278,6 +267,23 @@ Version: 0.1.3
     This build time stamp is over a month old.
     ```
 
+# lidR
+
+Version: 1.4.1
+
+## In both
+
+*   checking package dependencies ... ERROR
+    ```
+    Packages required but not available:
+      ‘rgl’ ‘rgeos’ ‘gdalUtils’ ‘mapview’ ‘mapedit’
+    
+    Package suggested but not available for checking: ‘rgdal’
+    
+    See section ‘The DESCRIPTION file’ in the ‘Writing R Extensions’
+    manual.
+    ```
+
 # MetamapsDB
 
 Version: 0.0.2
@@ -309,29 +315,10 @@ Version: 0.0.2
 
 Version: 1.0.0
 
-## In both
+## Newly broken
 
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Nima Hejazi <nhejazi@berkeley.edu>’
+*   R CMD check timed out
     
-    Uses the superseded package: ‘snow’
-    
-    Found the following (possibly) invalid URLs:
-      URL: https://cran.r-project.org/web/packages/drtmle/index.html
-        From: inst/doc/using_methyvim.html
-        CRAN URL not in canonical form
-      URL: https://cran.r-project.org/web/packages/randomForest/index.html
-        From: inst/doc/using_methyvim.html
-        CRAN URL not in canonical form
-      The canonical URL of the CRAN page for a package is 
-        https://CRAN.R-project.org/package=pkgname
-    
-    The Description field should not start with the package name,
-      'This package' or similar.
-    
-    This build time stamp is over a month old.
-    ```
 
 # multiApply
 
@@ -440,7 +427,7 @@ Version: 1.14.0
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25323624808432135.336.738865427951052207.660.738865426552843207.650
+    25324424808509135.336.738865427951052207.660.738865426552920207.650
     FINISHED!
     
     Total time:0minutes
@@ -560,19 +547,6 @@ Version: 2.1.1
     Maintainer: ‘Alexander Brenning <alexander.brenning@uni-jena.de>’
     
     The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
-
-# startR
-
-Version: 0.0.1
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Nicolau Manubens <nicolau.manubens@bsc.es>’
     
     This build time stamp is over a month old.
     ```
