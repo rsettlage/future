@@ -1,32 +1,8 @@
-# aroma.affymetrix
-
-Version: 3.1.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
-
 # aroma.core
 
 Version: 3.1.1
 
 ## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
 
 *   checking package dependencies ... NOTE
     ```
@@ -40,13 +16,6 @@ Version: 0.9.8
 
 ## In both
 
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch http://joss.theoj.org/papers/10.21105/joss.00135/status.svg
-    FailedConnectionException2 "joss.theoj.org" 80 False getAddrInfo: does not exist (Name or service not known)
-    ```
-
 *   checking Rd cross-references ... WARNING
     ```
     Unknown package ‘Rmpi’ in Rd xrefs
@@ -55,11 +24,11 @@ Version: 0.9.8
 *   checking re-building of vignette outputs ... WARNING
     ```
     ...
-    Created registry in '/scratch/hb/Rtmp3BgFfE/registry73776f819424' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpOtioTA/registry197123fa0fd0a' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/Rtmp3BgFfE/registry73773e4c32b4' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpOtioTA/registry1971229fa5022' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/hb/Rtmp3BgFfE/registry737742f4c707' using cluster functions 'Interactive'
+    Created registry in '/scratch/hb/RtmpOtioTA/registry1971261d29e0c' using cluster functions 'Interactive'
     Error in (function (value)  : Ooops.
     ! LaTeX Error: File `framed.sty' not found.
     
@@ -78,15 +47,6 @@ Version: 0.9.8
     Execution halted
     ```
 
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Michel Lang <michellang@gmail.com>’
-    
-    Uses the superseded package: ‘snow’
-    
-    This build time stamp is over a month old.
-    ```
-
 *   checking package dependencies ... NOTE
     ```
     Package suggested but not available for checking: ‘doMPI’
@@ -97,23 +57,6 @@ Version: 0.9.8
 Version: 1.3.0
 
 ## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Nima Hejazi <nhejazi@berkeley.edu>’
-    
-    The Description field should not start with the package name,
-      'This package' or similar.
-    
-    This build time stamp is over a month old.
-    ```
-
-*   checking DESCRIPTION meta-information ... NOTE
-    ```
-    Author field differs from that derived from Authors@R
-      Author:    ‘Nima Hejazi [aut, cre, cph], Alan Hubbard [aut], Weixin Cai [ctb]’
-      Authors@R: ‘Nima Hejazi [aut, cre, cph] (0000-0002-7127-2789), Alan Hubbard [aut] (0000-0002-3769-0127), Weixin Cai [ctb] (0000-0003-2680-3066)’
-    ```
 
 *   checking dependencies in R code ... NOTE
     ```
@@ -127,13 +70,6 @@ Version: 1.3.0
 Version: 2.1.0
 
 ## In both
-
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://travis-ci.org/paul-buerkner/brms.svg?branch=master
-    FailedConnectionException2 "travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
-    ```
 
 *   checking re-building of vignette outputs ... WARNING
     ```
@@ -164,19 +100,6 @@ Version: 2.1.0
         doc   2.3Mb
     ```
 
-# doFuture
-
-Version: 0.6.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
 # drake
 
 Version: 5.0.0
@@ -194,16 +117,33 @@ Version: 5.0.0
     Execution halted
     ```
 
-*   checking DESCRIPTION meta-information ... NOTE
-    ```
-    Authors@R field gives persons with non-standard roles:
-      Ben Marwick <bmarwick@uw.edu> [rev]: rev
-      Peter Slaughter <slaughter@nceas.ucsb.edu> [rev]: rev
-    ```
-
 # fiery
 
 Version: 1.1.0
+
+## Newly broken
+
+*   checking tests ...
+    ```
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+             onWSOpen = private$websocket_logic))
+      10: stop("Failed to create server")
+      
+      ══ testthat results  ═══════════════════════════════════════════════════════════
+      OK: 237 SKIPPED: 0 FAILED: 7
+      1. Error: life cycle events get fired (@test-Fire.R#168) 
+      2. Error: errors in start and resume gets caught (@test-Fire.R#288) 
+      3. Error: futures can be added and called (@test-Fire.R#329) 
+      4. Error: ignite is blocked during run (@test-Fire.R#404) 
+      5. Error: external triggers are fired (@test-Fire.R#424) 
+      6. Error: showcase opens a browser (@test-Fire.R#453) 
+      7. Error: is_running works (@test-Fire.R#529) 
+      
+      Error: testthat unit tests failed
+      Execution halted
+    ```
 
 ## In both
 
@@ -211,60 +151,6 @@ Version: 1.1.0
     ```
     Namespace in Imports field not imported from: ‘desc’
       All declared Imports should be used.
-    ```
-
-# future.BatchJobs
-
-Version: 0.15.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
-# future.batchtools
-
-Version: 0.6.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
-# googleComputeEngineR
-
-Version: 0.2.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Mark Edmondson <r@sunholo.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
-# kernelboot
-
-Version: 0.1.3
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Tymoteusz Wolodzko <twolodzko+kernelboot@gmail.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
 # lidR
@@ -290,47 +176,11 @@ Version: 0.0.2
 
 ## In both
 
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://zenodo.org/badge/19045/etheleon/metamaps.svg
-    FailedConnectionException2 "zenodo.org" 443 True getAddrInfo: does not exist (Name or service not known)
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Wesley GOI <wesley@bic.nus.edu.sg>’
-    
-    This build time stamp is over a month old.
-    ```
-
 *   checking dependencies in R code ... NOTE
     ```
     Namespaces in Imports field not imported from:
       ‘Matrix’ ‘shiny’
       All declared Imports should be used.
-    ```
-
-# methyvim
-
-Version: 1.0.0
-
-## Newly broken
-
-*   R CMD check timed out
-    
-
-# multiApply
-
-Version: 0.0.1
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Alasdair Hunter <alasdair.hunter@bsc.es>’
-    
-    This build time stamp is over a month old.
     ```
 
 # origami
@@ -339,61 +189,10 @@ Version: 0.8.0
 
 ## In both
 
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Jeremy Coyle <jeremyrcoyle@gmail.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
 *   checking dependencies in R code ... NOTE
     ```
     Namespace in Imports field not imported from: ‘methods’
       All declared Imports should be used.
-    ```
-
-# pbmcapply
-
-Version: 1.2.4
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Kevin kuang <kvn.kuang@mail.utoronto.ca>’
-    
-    This build time stamp is over a month old.
-    ```
-
-# penaltyLearning
-
-Version: 2017.12.08
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Toby Dylan Hocking <toby.hocking@r-project.org>’
-    
-    Version contains leading zeroes (2017.12.08)
-    Version contains large components (2017.12.08)
-    
-    This build time stamp is over a month old.
-    ```
-
-# PSCBS
-
-Version: 0.63.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
 # QDNAseq
@@ -411,23 +210,10 @@ Version: 1.14.0
     Extensions’ manual.
     ```
 
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Daoud Sie <d.sie@vumc.nl>’
-    
-    The Title field should be in title case, current version then in title case:
-    ‘Quantitative DNA sequencing for chromosomal aberrations’
-    ‘Quantitative DNA Sequencing for Chromosomal Aberrations’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
-    ```
-
 *   checking re-building of vignette outputs ... NOTE
     ```
     ...
-    25324424808509135.336.738865427951052207.660.738865426552920207.650
+    25324424808508135.336.738865427951052207.660.738865426552919207.650
     FINISHED!
     
     Total time:0minutes
@@ -450,31 +236,11 @@ Version: 1.14.0
     Execution halted
     ```
 
-# R.filesets
-
-Version: 2.11.0
-
-## In both
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Henrik Bengtsson <henrikb@braju.com>’
-    
-    This build time stamp is over a month old.
-    ```
-
 # robotstxt
 
 Version: 0.5.2
 
 ## In both
-
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch https://api.travis-ci.org/ropenscilabs/robotstxt.svg?branch=master
-    FailedConnectionException2 "api.travis-ci.org" 443 True getAddrInfo: does not exist (Name or service not known)
-    ```
 
 *   checking re-building of vignette outputs ... WARNING
     ```
@@ -485,15 +251,6 @@ Version: 0.5.2
     Error: processing vignette 'using_robotstxt.Rmd' failed with diagnostics:
     Could not resolve host: google.com; Name or service not known
     Execution halted
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Peter Meissner <retep.meissner@gmail.com>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
 # sperrorest
@@ -524,13 +281,6 @@ Version: 2.1.1
       Execution halted
     ```
 
-*   checking top-level files ... WARNING
-    ```
-    Conversion of ‘README.md’ failed:
-    pandoc: Could not fetch http://www.repostatus.org/badges/latest/inactive.svg
-    FailedConnectionException2 "www.repostatus.org" 80 False getAddrInfo: does not exist (Name or service not known)
-    ```
-
 *   checking re-building of vignette outputs ... WARNING
     ```
     Error in re-building vignettes:
@@ -540,14 +290,5 @@ Version: 2.1.1
     Error: processing vignette 'spatial-modeling-use-case.Rmd' failed with diagnostics:
     pandoc document conversion failed with error 67
     Execution halted
-    ```
-
-*   checking CRAN incoming feasibility ... NOTE
-    ```
-    Maintainer: ‘Alexander Brenning <alexander.brenning@uni-jena.de>’
-    
-    The Date field is over a month old.
-    
-    This build time stamp is over a month old.
     ```
 
