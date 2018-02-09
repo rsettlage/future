@@ -63,6 +63,39 @@ message("*** asIEC() ... DONE")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# .length()
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+message("*** .length() ...")
+.length <- future:::.length
+
+objs <- list(
+  a = 1:3,
+  b = as.list(1:3),
+  c = structure(as.list(1:3), class = c("foo", "list")),
+  d = data.frame(a = 1:3),
+  e = as.environment(list(a = 1:3))
+)
+truth <- c(a = 3L, b = 3L, c = 3L, d = 1L, e = 1L)
+
+## Special case: length(x) == 5, but .length(x) == 2
+## BUG FIX: https://github.com/HenrikBengtsson/future/issues/164
+if (requireNamespace("tools")) {
+  objs[["f"]] <- structure(list("foo", length = 5L), class = "pdf_doc")
+  truth["f"] <- 2L
+}
+
+for (name in names(objs)) {
+  obj <- objs[[name]]
+  len <- length(obj)
+  .len <- .length(obj)
+  cat(sprintf("%s: length = %d, .length = %d, expected = %d\n",
+              name, len, .len, truth[name]))
+  stopifnot(.len == truth[name])
+}
+
+message("*** .length() ... DONE")
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # debug()
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 message("*** mdebug() ...")
@@ -148,6 +181,57 @@ res <- try(importParallel("<unknown function>"), silent = TRUE)
 stopifnot(inherits(res, "try-error"))
 
 message("*** importParallel() ... DONE")
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Random seeds
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+message("*** Random seeds ...")
+
+set_random_seed(seed = NULL)
+seed <- get_random_seed()
+stopifnot(is.null(seed))
+
+set_random_seed(seed = 42L)
+seed <- get_random_seed()
+stopifnot(identical(seed, 42L))
+
+res <- tryCatch({
+  seed <- as_lecyer_cmrg_seed(seed = FALSE)
+}, error = identity)
+print(res)
+stopifnot(inherits(res, "simpleError"))
+
+seed <- as_lecyer_cmrg_seed(seed = 42L)
+str(seed)
+set_random_seed(seed = seed)
+stopifnot(identical(get_random_seed(), seed))
+
+seed2 <- as_lecyer_cmrg_seed(seed = TRUE)
+str(seed2)
+stopifnot(identical(seed2, seed))
+
+seed3 <- as_lecyer_cmrg_seed(seed = seed)
+str(seed3)
+stopifnot(identical(seed3, seed))
+
+## Invalid L'Ecuyer seed
+seed_invalid <- seed + 1L
+res <- tryCatch({
+  seed <- as_lecyer_cmrg_seed(seed = seed_invalid)
+}, error = identity)
+print(res)
+stopifnot(inherits(res, "simpleError"))
+
+## Invalid seed
+res <- tryCatch({
+  seed <- as_lecyer_cmrg_seed(seed = 1:2)
+}, error = identity)
+print(res)
+stopifnot(inherits(res, "simpleError"))
+
+message("*** Random seeds ... DONE")
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # myInternalIP() and myExternalIP()

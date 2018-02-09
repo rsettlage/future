@@ -162,16 +162,6 @@ plan <- local({
     if (is.list(strategy)) {
       stopifnot(is.list(strategy), length(strategy) >= 1L)
 
-      ## Check for usage of defunct eager() and lazy()
-      for (ii in seq_along(strategy)) {
-        stopifnot(is.function(strategy[[ii]]))
-        if (inherits(strategy[[ii]], "lazy")) {
-          .Defunct(msg = "Future strategy 'lazy' is defunct. Lazy evaluation can no longer be set via plan(). Instead, use f <- future(..., lazy = TRUE) or v %<-% { ... } %lazy% TRUE.")
-        } else if (inherits(strategy[[ii]], "lazy")) {
-          .Defunct(msg = "Future strategy 'eager' is defunct. Please use 'sequential' instead, which works identical.")
-        }
-      }
-
       class(strategy) <- unique(c("FutureStrategyList", class(strategy)))
       stack <<- strategy
       ## Stop any (implicitly started) clusters?
@@ -257,18 +247,6 @@ plan <- local({
       }
     }
 
-    using_lazy <- lapply(newStack, FUN = inherits, "lazy")
-    using_lazy <- any(unlist(using_lazy, use.names = FALSE))
-    if (using_lazy) {
-      .Defunct(msg = "Future strategy 'lazy' is defunct. Lazy evaluation can no longer be set via plan(). Instead, use f <- future(..., lazy = TRUE) or v %<-% { ... } %lazy% TRUE.")
-    }
-
-    using_eager <- lapply(newStack, FUN = inherits, "eager")
-    using_eager <- any(unlist(using_eager, use.names = FALSE))
-    if (using_eager) {
-      .Defunct(msg = "Future strategy 'eager' is defunct. Please use 'sequential' instead, which works identical.")
-    }
-
     ## Set new strategy for futures
     class(newStack) <- c("FutureStrategyList", class(newStack))
     stack <<- newStack
@@ -279,6 +257,13 @@ plan <- local({
 
     ## Initiate future workers?
     if (.init) plan_init()
+
+    ## Sanity checks
+    n <- nbrOfWorkers()
+    if (getOption("future.debug", FALSE)) {
+      mdebug(sprintf("plan(): nbrOfWorkers() = %g", n))
+    }
+    stopifnot(is.numeric(n), length(n) == 1, !is.na(n), n >= 1)
 
     invisible(oldStack[[1L]])
   } # function()

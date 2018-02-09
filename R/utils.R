@@ -61,67 +61,10 @@ asIEC <- function(size, digits = 2L) {
 } # asIEC()
 
 
-mdebug <- function(...) {
+mdebug <- function(..., appendLF = TRUE) {
   if (!getOption("future.debug", FALSE)) return()
-  message(sprintf(...))
-} ## mdebug()
-
-
-## Create a universally unique identifier (UUID) for an R object
-#' @importFrom digest digest
-uuid <- function(source, keep_source = FALSE) {
-  uuid <- digest(source)
-  uuid <- strsplit(uuid, split = "")[[1]]
-  uuid <- paste(c(uuid[1:8], "-", uuid[9:12], "-", uuid[13:16], "-", uuid[17:20], "-", uuid[21:32]), collapse = "")
-  if (keep_source) attr(uuid, "source") <- source
-  uuid
-} ## uuid()
-
-uuid_of_connection <- function(con, ..., must_work = TRUE) {
-  stopifnot(inherits(con, "connection"))
-  if (must_work) {
-    info <- summary(con)
-    info$opened <- NULL
-    uuid <- uuid(info, ...)
-  } else {
-    uuid <- tryCatch({
-      info <- summary(con)
-      info$opened <- NULL
-      uuid(info, ...)
-    }, error = function(ex) {
-      attr(con, "uuid")
-    })
-  }
-  uuid
-} ## uuid_of_connection()
-
-## A universally unique identifier (UUID) for the current
-## R process.  Generated only once.
-#' @importFrom digest digest
-session_uuid <- local({
-  value <- NULL
-  function(attributes = FALSE) {
-    uuid <- value
-    if (!is.null(uuid)) {
-      if (!attributes) attr(uuid, "source") <- NULL
-      return(uuid)
-    }
-    info <- Sys.info()
-    host <- Sys.getenv(c("HOST", "HOSTNAME", "COMPUTERNAME"))
-    host <- host[nzchar(host)][1]
-    info <- list(
-      host = host,
-      info = info,
-      pid = Sys.getpid(),
-      time = Sys.time(),
-      random = sample.int(.Machine$integer.max, size = 1L)
-    )
-    uuid <- uuid(info, keep_source = TRUE)
-    value <<- uuid
-    if (!attributes) attr(uuid, "source") <- NULL
-    uuid
-  }
-})
+  message(sprintf(...), appendLF = appendLF)
+}
 
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -223,7 +166,8 @@ detectCores <- local({
 
 ## We are currently importing the following non-exported functions:
 ## * cluster futures:
-##   - parallel:::defaultCluster()  ## non-critical / not really needed
+##   - parallel:::defaultCluster()  ## non-critical / not really needed /
+##                                  ## can be dropped in R (>= 3.5.0)
 ##   - parallel:::sendCall()        ## run()
 ##   - parallel:::recvResult()      ## value()
 ## * multicore futures:
@@ -240,6 +184,16 @@ importParallel <- local({
     res <- cache[[name]]
     if (is.null(res)) {
       ns <<- getNamespace("parallel")
+
+      ## SPECIAL: parallel::getDefaultCluster() was added in R devel r73712
+      ## (to become 3.5.0) on 2017-11-11.  The fallback in R (< 3.5.0) is
+      ## to use parallel:::defaultCluster(). /HB 2017-11-11
+      if (name == "getDefaultCluster") {
+        if (!exists(name, mode = "function", envir = ns, inherits = FALSE)) {
+          name <- "defaultCluster"
+        }
+      }
+
       if (!exists(name, mode = "function", envir = ns, inherits = FALSE)) {
         ## covr: skip=3
         msg <- sprintf("This type of future processing is not supported on this system (%s), because parallel function %s() is not available", sQuote(.Platform$OS.type), name)
@@ -461,58 +415,60 @@ myInternalIP <- local({
 
 ## A *rough* estimate of size of an object + its environment.
 #' @importFrom utils object.size
-objectSize <- function(x, depth = 3L) {
+objectSize <- function(x, depth = 3L, enclosure = getOption("future.globals.objectSize.enclosure", FALSE)) {
   # Nothing to do?
   if (isNamespace(x)) return(0)
   if (depth <= 0) return(0)
   
   if (!is.list(x) && !is.environment(x)) {
     size <- unclass(object.size(x))
-    x <- environment(x)
+    ## Issue #176 is because of this
+    if (enclosure) x <- environment(x)
   } else {
     size <- 0
   }
 
   ## Nothing more to do?
   if (depth == 1) return(size)
-  
+
   .scannedEnvs <- new.env()
   scanned <- function(e) {
-    for (name in names(.scannedEnvs)) if (identical(e, .scannedEnvs[[name]])) return(TRUE)
+    for (name in names(.scannedEnvs))
+      if (identical(e, .scannedEnvs[[name]])) return(TRUE)
     FALSE
   }
-
-  objectSize.FutureGlobals <- function(x, ...) {
-    size <- attr(x, "total_size")
-    if (!is.na(size)) return(size)
-    objectSize.list(x, ...)
-  }
   
-  objectSize.list <- function(x, depth) {
-    # Nothing to do?
+  objectSize_list <- function(x, depth) {
+    ## Nothing to do?
     if (depth <= 0) return(0)
+
+    if (inherits(x, "FutureGlobals")) {
+      size <- attr(x, "total_size")
+      if (!is.na(size)) return(size)
+    }
+
     depth <- depth - 1L
     size <- 0
 
     ## Use the true length that corresponds to what .subset2() uses
     nx <- .length(x)
-    
+
     for (kk in seq_len(nx)) {
       ## NOTE: Use non-class dispatching subsetting to avoid infinite loop,
       ## e.g. x <- packageVersion("future") gives x[[1]] == x.
       x_kk <- .subset2(x, kk)
       if (is.list(x_kk)) {
-        size <- size + objectSize.list(x_kk, depth = depth)
+        size <- size + objectSize_list(x_kk, depth = depth)
       } else if (is.environment(x_kk)) {
-        if (!scanned(x_kk)) size <- size + objectSize.env(x_kk, depth = depth)
+        if (!scanned(x_kk)) size <- size + objectSize_env(x_kk, depth = depth)
       } else {
         size <- size + unclass(object.size(x_kk))
       }
     }
     size
-  } ## objectSize.list()
+  } ## objectSize_list()
   
-  objectSize.env <- function(x, depth) {
+  objectSize_env <- function(x, depth) {
     # Nothing to do?
     if (depth <= 0) return(0)
     depth <- depth - 1L
@@ -557,11 +513,11 @@ objectSize <- function(x, depth = 3L) {
       if (missing(x_kk)) next
       
       if (is.list(x_kk)) {
-        size <- size + objectSize.list(x_kk, depth = depth)
+        size <- size + objectSize_list(x_kk, depth = depth)
       } else if (is.environment(x_kk)) {
 ##        if (!inherits(x_kk, "Future") && !scanned(x_kk)) {
         if (!scanned(x_kk)) {
-          size <- size + objectSize.env(x_kk, depth = depth)
+          size <- size + objectSize_env(x_kk, depth = depth)
         }
       } else {
         size <- size + unclass(object.size(x_kk))
@@ -569,16 +525,16 @@ objectSize <- function(x, depth = 3L) {
     }
   
     size
-  } ## objectSize.env()
+  } ## objectSize_env()
 
   ## Suppress "Warning message:
   ##   In doTryCatch(return(expr), name, parentenv, handler) :
-  ##   restarting interrupted promise evaluation
+  ##   restarting interrupted promise evaluation"
   suppressWarnings({
     if (is.list(x)) {
-      size <- size + objectSize.list(x, depth = depth - 1L)
+      size <- size + objectSize_list(x, depth = depth - 1L)
     } else if (is.environment(x)) {
-      size <- size + objectSize.env(x, depth = depth - 1L)
+      size <- size + objectSize_env(x, depth = depth - 1L)
     }
   })
 
@@ -614,8 +570,8 @@ is_valid_random_seed <- function(seed) {
   env$.Random.seed <- seed
   res <- tryCatch({
     sample.int(n = 1L, size = 1L, replace = FALSE)
-  }, FUN = function(w) w)
-  !inherits(res, "warning")
+  }, simpleWarning = function(w) w)
+  !inherits(res, "simpleWarning")
 }
 
 is_lecyer_cmrg_seed <- function(seed) {
@@ -683,6 +639,7 @@ as_lecyer_cmrg_seed <- function(seed) {
 #' 
 #' @keywords internal
 #' @rdname private_length
+#' @importFrom utils getS3method
 .length <- function(x) {
   nx <- length(x)
   
@@ -692,12 +649,158 @@ as_lecyer_cmrg_seed <- function(seed) {
   if (length(classes) == 1L && classes == "list") return(nx)
 
   ## Identify all length() methods for this object
-  mthds <- sprintf("length.%s", classes)
-  keep <- lapply(mthds, FUN = exists, mode = "function", inherits = TRUE)
-  keep <- unlist(keep, use.names = FALSE)
+  for (class in classes) {
+    fun <- getS3method("length", class, optional = TRUE)
+    if (!is.null(fun)) {
+      nx <- length(unclass(x))
+      break
+    }
+  }
 
-  ## If found, don't trust them
-  if (any(keep)) nx <- length(unclass(x))
-  
   nx
 } ## .length()
+
+
+#' Creates a connection to the system null device
+#'
+#' @return Returns a open, binary [base::connection()].
+nullcon <- local({
+  nullfile <- switch(.Platform$OS.type, windows = "NUL", "/dev/null")
+  .nullcon <- function() file(nullfile, open = "wb")
+
+  ## Assert that a null device exists
+  tryCatch({
+    con <- .nullcon()
+    on.exit(close(con))
+    cat("test", file = con)
+  }, error = function(ex) {
+    stop(sprintf("Failed to write to null file (%s) on this platform (%s). Please report this the maintainer of the 'future' package.", sQuote(nullfile), sQuote(.Platform$OS.type)))
+  })
+  
+  .nullcon
+})
+
+
+reference_filters <- local({
+  filters <- default <- list(
+    ignore_envirs = function(ref, typeof, class, ...) {
+      typeof != "environment"
+    }
+  )
+
+  function(action = "drop_function", ...) {
+    if (action == "drop_function") {
+      function(ref) {
+        typeof <- typeof(ref)
+        class <- class(ref)
+        for (kk in seq_along(filters)) {
+          filter <- filters[[kk]]
+          if (filter(ref, typeof = typeof, class = class)) next
+          return(TRUE) ## drop reference
+        }
+        FALSE  ## don't drop reference
+      }
+    } else if (action == "set") {
+      filters <- list(...)
+    } else if (action == "reset") {
+      filters <<- default
+    } else if (action == "append") {
+      filters <<- c(filters, list(...))
+    } else if (action == "prepend") {
+      filters <<- c(list(...), filters)
+    } else if (action == "get") {
+      filters
+    }
+  }
+})
+
+#' Get first or all references of an \R object
+#'
+#' @param x The \R object to be checked.
+#' 
+#' @param first_only If `TRUE`, only the first reference is returned,
+#' otherwise all references.
+#'
+#' @return `find_references()` returns a list of one or more references
+#' identified.
+find_references <- function(x, first_only = FALSE) {
+  con <- nullcon()
+  on.exit(close(con))
+
+  ## Get function that drops references
+  drop_reference <- reference_filters()
+  
+  refs <- list()
+    
+  refhook <- if (first_only) {
+    function(ref) {
+      if (drop_reference(ref)) return(NULL)
+      refs <<- c(refs, list(ref))
+      stop(structure(list(message = ""), class = c("refhook", "condition")))
+    }
+  } else {
+    function(ref) {
+      if (drop_reference(ref)) return(NULL)
+      refs <<- c(refs, list(ref))
+      NULL
+    }
+  }
+  
+  tryCatch({
+    serialize(x, connection = con, ascii = FALSE, xdr = FALSE,
+              refhook = refhook)
+  }, refhook = identity)
+  
+  refs
+}
+
+
+#' Assert that there are no references among the identified globals
+#'
+#' @param action Type of action to take if a reference is found.
+#' 
+#' @return If a reference is detected, an informative error, warning, message,
+#' or a character string is produced, otherwise `NULL` is returned invisibly.
+#'
+#' @rdname find_references
+assert_no_references <- function(x, action = c("error", "warning", "message", "string")) {
+  ref <- find_references(x, first_only = TRUE)
+  if (length(ref) == 0) return()
+
+  action <- match.arg(action)
+  
+  ## Identify which global object has a reference
+  global <- ""
+  ref <- ref[[1]]
+  if (is.list(x) && !is.null(names(x))) {
+    for (ii in seq_along(x)) {
+      x_ii <- x[[ii]]
+      ref_ii <- find_references(x_ii, first_only = TRUE)
+      if (length(ref_ii) > 0) {
+        global <- sprintf(" (%s of class %s)",
+                          sQuote(names(x)[ii]), sQuote(class(x_ii)[1]))
+        ref <- ref_ii[[1]]
+        break
+      }
+    }
+  }
+
+  typeof <- typeof(ref)
+  class <- class(ref)[1]
+  if (class == typeof) {
+    typeof <- sQuote(typeof)
+  } else {
+    typeof <- sprintf("%s of class %s", sQuote(typeof), sQuote(class))
+  }
+  
+  msg <- sprintf("Detected a non-exportable reference (%s) in one of the globals%s used in the future expression", typeof, global)
+  if (action == "error") {
+    stop(FutureError(msg, call = FALSE))
+  } else if (action == "warning") {
+    warning(FutureWarning(msg, call = FALSE))
+  } else if (action == "message") {
+    message(FutureMessage(msg, call = FALSE))
+  } else if (action == "string") {
+    msg
+  }
+}

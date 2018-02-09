@@ -42,7 +42,7 @@ So why are futures useful?  Because we can choose to evaluate the future express
 [1] 3.14
 ```
 With asynchronous futures, the current/main R process does _not_ block, which means it is available for further processing while the futures are being resolved
-in separates processes running in the background.  In other words, futures provide a simple but yet powerful construct for parallel and / or distributed processing in R.
+in separate processes running in the background.  In other words, futures provide a simple but yet powerful construct for parallel and / or distributed processing in R.
 
 
 Now, if you cannot be bothered to read all the nitty-gritty details about futures, but just want to try them out, then skip to the end to play with the Mandelbrot demo using both parallel and non-parallel evaluation.
@@ -92,13 +92,11 @@ The future package implements the following types of futures:
 | `sequential`    | all         | sequentially and in the current R process
 | `transparent`   | all         | as sequential w/ early signaling and w/out local (for debugging)
 | _asynchronous:_ |             | _parallel_:
-| `multiprocess`  | all         | multicore iff supported, otherwise multisession
+| `multiprocess`  | all         | multicore, if supported, otherwise multisession
 | `multisession`  | all         | background R sessions (on current machine)
 | `multicore`     | not Windows | forked R processes (on current machine)
 | `cluster`       | all         | external R sessions on current, local, and/or remote machines
 | `remote`        | all         | Simple access to remote R sessions
-
-_Note_: Prior to future 1.3.0, `eager` and `lazy` were also options, but has since been deprecated and are both defunct as of 1.6.0.  The reason for this is that whether a future should be resolved by lazy evaluation or not has to, in some cases, be in the control of the developer, and if the end user would be able change that, the code may not function as intended.
 
 The future package is designed such that support for additional strategies can be implemented as well.  For instance, the [future.batchtools] package provides futures for all types of _cluster functions_ ("backends") that the [batchtools] package supports.  Specifically, futures for evaluating R expressions via job schedulers such as Slurm, TORQUE/PBS, Oracle/Sun Grid Engine (SGE) and Load Sharing Facility (LSF) are also available.  (_Comment_: The [future.BatchJobs] package provides analogue backends based on the [BatchJobs] package; however the BatchJobs developers have deprecated it in favor of batchtools.)
 
@@ -564,6 +562,13 @@ R package future is available on [CRAN](https://cran.r-project.org/package=futur
 install.packages('future')
 ```
 
+### Pre-release version
+
+To install the pre-release version that is available in Git branch `develop` on GitHub, use:
+```r
+remotes::install_github('HenrikBengtsson/future@develop')
+```
+This will install the package from source.  
 
 
 

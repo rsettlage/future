@@ -137,7 +137,8 @@ print.Future <- function(x, ...) {
     g <- head(g, n = 5L)
     gSizes <- head(gSizes, n = 5L)
     g <- sprintf("%s %s of %s", sapply(g, FUN = function(x) class(x)[1]), sQuote(names(g)), sapply(gSizes, FUN = asIEC))
-    if (ng > 5L) g <- sprintf("%s ...", g)
+    if (ng > length(g)) g <- c(g, "...")
+    g <- hpaste(g, maxHead = 5L, maxTail = 0L)
     cat(sprintf("Globals: %d objects totaling %s (%s)\n", ng, asIEC(gTotalSize), g))
   } else {
     cat("Globals: <none>\n")
@@ -269,7 +270,7 @@ value.Future <- function(future, signal = TRUE, ...) {
   if (signal && future$state == "failed") {
     mdebug("Future state: %s", sQuote(future$state))
     mdebug("Future value: %s", sQuote(value))
-    stop(FutureError(future))
+    stop(FutureEvaluationError(future))
   }
 
   value
