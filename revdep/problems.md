@@ -42,13 +42,13 @@ Version: 0.9.8
     ```
     ...
     No configuration file found
-    Created registry in '/scratch/henrik/1113010.cclc01.som.ucsf.edu/RtmpNlVbSd/registry163e827b2a87e' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1114560.cclc01.som.ucsf.edu/RtmpriD640/registry1e86a13e2f144' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1113010.cclc01.som.ucsf.edu/RtmpNlVbSd/registry163e8370e77f8' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1114560.cclc01.som.ucsf.edu/RtmpriD640/registry1e86a74c5b383' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1113010.cclc01.som.ucsf.edu/RtmpNlVbSd/registry163e841a7c269' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1114560.cclc01.som.ucsf.edu/RtmpriD640/registry1e86abf75240' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1113010.cclc01.som.ucsf.edu/RtmpNlVbSd/registry163e81194af58' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1114560.cclc01.som.ucsf.edu/RtmpriD640/registry1e86a4d93de77' using cluster functions 'Interactive'
     Error in (function (value)  : Ooops.
     You are recommended to install the tinytex package to build PDF.FALSE
     This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6)
@@ -92,7 +92,7 @@ Version: 1.3.0
         doc  1025.0Mb
     ```
 
-*   checking Rd cross-references ... NOTE
+*   checking dependencies in R code ... NOTE
     ```
     Namespaces in Imports field not imported from:
       'DBI' 'Matrix' 'SuperLearner' 'biotmleData'
@@ -236,15 +236,6 @@ Version: 1.0.2
     checking a package with encoding  'UTF-8'  in an ASCII locale
     ```
 
-*   checking re-building of vignette outputs ... WARNING
-    ```
-    Error in re-building vignettes:
-      ...
-    Error: processing vignette 'using_drtmle.Rmd' failed with diagnostics:
-    there is no package called 'evaluate'
-    Execution halted
-    ```
-
 # fiery
 
 Version: 1.1.0
@@ -298,7 +289,7 @@ Version: 1.4.1
 *   checking package dependencies ... ERROR
     ```
     Packages required but not available:
-      'rgeos' 'gdalUtils' 'mapview' 'mapedit'
+      'rgl' 'rgeos' 'gdalUtils' 'mapview' 'mapedit'
     
     Package suggested but not available for checking: 'rgdal'
     
@@ -369,7 +360,7 @@ Version: 0.63.0
 
 # QDNAseq
 
-Version: 1.12.0
+Version: 1.14.0
 
 ## In both
 
@@ -410,7 +401,7 @@ Version: 1.12.0
 
 # sperrorest
 
-Version: 2.1.1
+Version: 2.1.5
 
 ## In both
 
@@ -419,13 +410,13 @@ Version: 2.1.1
     ...
     Error in re-building vignettes:
       ...
-    Could not fetch https://raw.githubusercontent.com/pat-s/sperrorest/master/inst/figure/resamp-plot.png
+    Could not fetch https://raw.githubusercontent.com/pat-s/sperrorest/master/man/figures/resamp-plot.png
     HttpExceptionRequest Request {
       host                 = "raw.githubusercontent.com"
       port                 = 443
       secure               = True
       requestHeaders       = []
-      path                 = "/pat-s/sperrorest/master/inst/figure/resamp-plot.png"
+      path                 = "/pat-s/sperrorest/master/man/figures/resamp-plot.png"
       queryString          = ""
       method               = "GET"
       proxy                = Nothing

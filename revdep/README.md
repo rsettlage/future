@@ -9,7 +9,7 @@
 |language |en                           |
 |collate  |C                            |
 |tz       |America/Los_Angeles          |
-|date     |2018-03-24                   |
+|date     |2018-03-30                   |
 
 # Dependencies
 
@@ -35,7 +35,7 @@
 |[codebook](problems.md#codebook)                         |0.5.8      |      |1       |4    |
 |doFuture                                                 |0.6.0      |      |        |     |
 |[drake](problems.md#drake)                               |5.1.0      |      |2       |     |
-|[drtmle](problems.md#drtmle)                             |1.0.2      |      |2       |     |
+|[drtmle](problems.md#drtmle)                             |1.0.2      |      |1       |     |
 |[fiery](problems.md#fiery)                               |1.1.0      |      |        |1    |
 |future.apply                                             |0.1.0      |      |        |     |
 |future.BatchJobs                                         |0.15.0     |      |        |     |
@@ -53,6 +53,6 @@
 |[QDNAseq](problems.md#qdnaseq)                           |1.14.0     |      |1       |1    |
 |R.filesets                                               |2.12.0     |      |        |     |
 |robotstxt                                                |0.6.0      |      |        |     |
-|[sperrorest](problems.md#sperrorest)                     |2.1.1      |      |1       |1    |
+|[sperrorest](problems.md#sperrorest)                     |2.1.5      |      |1       |1    |
 |startR                                                   |0.0.1      |      |        |     |
 
