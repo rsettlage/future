@@ -42,13 +42,13 @@ Version: 0.9.8
     ```
     ...
     No configuration file found
-    Created registry in '/scratch/henrik/1114945.cclc01.som.ucsf.edu/RtmpTxgAXc/registry239ed31fb2930' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1117039.cclc01.som.ucsf.edu/RtmpwE4ZBD/registry277ec54c88a88' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1114945.cclc01.som.ucsf.edu/RtmpTxgAXc/registry239ed2e2cceb1' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1117039.cclc01.som.ucsf.edu/RtmpwE4ZBD/registry277ec59415209' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1114945.cclc01.som.ucsf.edu/RtmpTxgAXc/registry239ed5d7fd79' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1117039.cclc01.som.ucsf.edu/RtmpwE4ZBD/registry277ec286fb15c' using cluster functions 'Interactive'
     No configuration file found
-    Created registry in '/scratch/henrik/1114945.cclc01.som.ucsf.edu/RtmpTxgAXc/registry239ed5268c736' using cluster functions 'Interactive'
+    Created registry in '/scratch/henrik/1117039.cclc01.som.ucsf.edu/RtmpwE4ZBD/registry277ec72919fa4' using cluster functions 'Interactive'
     Error in (function (value)  : Ooops.
     You are recommended to install the tinytex package to build PDF.FALSE
     This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6)
@@ -325,19 +325,6 @@ Version: 1.0.0
 
 Version: 1.0.0
 
-## Newly fixed
-
-*   checking re-building of vignette outputs ... WARNING
-    ```
-    Error in re-building vignettes:
-      ...
-    Error running filter /home/shared/cbc/software_cbc/pandoc-2.1.2/bin/pandoc-citeproc:
-    fd:12: hPutBuf: resource vanished (Broken pipe)
-    Error: processing vignette 'generalizedCV.Rmd' failed with diagnostics:
-    pandoc document conversion failed with error 83
-    Execution halted
-    ```
-
 ## In both
 
 *   checking examples ... WARNING
@@ -356,6 +343,19 @@ Version: 2017.12.08
       installed size is 1024.2Mb
       sub-directories of 1Mb or more:
         data  1024.0Mb
+    ```
+
+# PSCBS
+
+Version: 0.63.0
+
+## In both
+
+*   checking installed package size ... NOTE
+    ```
+      installed size is 1025.9Mb
+      sub-directories of 1Mb or more:
+        data-ex  1024.0Mb
     ```
 
 # QDNAseq
@@ -396,38 +396,6 @@ Version: 1.14.0
                         [T1]{fontenc}^^M
     !  ==> Fatal error occurred, no output PDF file produced!
     Calls: buildVignettes -> texi2pdf -> texi2dvi
-    Execution halted
-    ```
-
-# robotstxt
-
-Version: 0.6.0
-
-## In both
-
-*   checking re-building of vignette outputs ... WARNING
-    ```
-    ...
-    
-     google.com                      
-    
-    
-     google.com                      
-    
-    
-    Attaching package: 'dplyr'
-    
-    The following objects are masked from 'package:stats':
-    
-        filter, lag
-    
-    The following objects are masked from 'package:base':
-    
-        intersect, setdiff, setequal, union
-    
-    Quitting from lines 123-128 (using_robotstxt.Rmd) 
-    Error: processing vignette 'using_robotstxt.Rmd' failed with diagnostics:
-    name lookup timed out
     Execution halted
     ```
 

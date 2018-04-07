@@ -9,7 +9,7 @@
 |language |en                           |
 |collate  |C                            |
 |tz       |America/Los_Angeles          |
-|date     |2018-04-02                   |
+|date     |2018-04-07                   |
 
 # Dependencies
 
@@ -46,13 +46,13 @@
 |[lidR](problems.md#lidr)                                 |1.4.1      |1     |        |     |
 |[MetamapsDB](problems.md#metamapsdb)                     |0.0.2      |      |        |1    |
 |[methyvim](problems.md#methyvim)                         |1.0.0      |      |1       |     |
-|[origami](problems.md#origami)                           |1.0.0      |      |1 -1    |     |
+|[origami](problems.md#origami)                           |1.0.0      |      |1       |     |
 |pbmcapply                                                |1.2.4      |      |        |     |
 |[penaltyLearning](problems.md#penaltylearning)           |2017.12.08 |      |        |1    |
-|PSCBS                                                    |0.63.0     |      |        |-1   |
+|[PSCBS](problems.md#pscbs)                               |0.63.0     |      |        |1    |
 |[QDNAseq](problems.md#qdnaseq)                           |1.14.0     |      |1       |1    |
 |R.filesets                                               |2.12.0     |      |        |     |
-|[robotstxt](problems.md#robotstxt)                       |0.6.0      |      |1       |     |
+|robotstxt                                                |0.6.0      |      |        |     |
 |[sperrorest](problems.md#sperrorest)                     |2.1.5      |      |1       |1    |
 |startR                                                   |0.0.1      |      |        |     |
 
