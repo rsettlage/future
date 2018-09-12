@@ -158,7 +158,7 @@ To capture the output produced by futures, use `capture.output()` as you would d
 
 
 
-## Capturing and relaying standard error
+## Standard error
 
 Analogously to the standard output, the standard error can be captured and relayed as given by argument `stderr`.  For example,
 
@@ -179,8 +179,10 @@ Contrary to the standard output, due to a [limitation in R](https://github.com/H
 > library(future)
 > f <- future({
 +   message("Hello world!")
++   ## Our captured stderr is ended by the following call:
 +   capture.output(x <- NULL, type = "message")
-+   message("Hey there")
++   ## From here on it is as if we had used stderr = NA:
++   message("Hey there") 
 +   print(1:3)
 +   42L
 + }, stderr = TRUE)
@@ -193,7 +195,7 @@ Hey there
 [1] 42
 ```
 
-This limitation is why the default is (currently) `stderr = NA`.  Note that the behavior of `stderr = NA` differ between future backends, e.g.
+This limitation is why the default is (currently) `stderr = NA`.  Note that the behavior of `stderr = NA` differ between future backends.  For instance, compare
 
 ```r
 > library(future)
