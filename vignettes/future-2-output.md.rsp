@@ -98,6 +98,8 @@ Note how the captured output is relayed followed by the printing of the value.  
 [1] 42
 ```
 
+The capturing and relaying of the standard output can be controlled by argument `stdout`, which defaults to `stdout = TRUE`.  If `stdout = FALSE`, then the output is captured and dropped.  If `stdout = NA`, then the standard output is left alone, where the behavior is specific to the future backend used.
+
 
 ## Future frontends
 
@@ -138,7 +140,7 @@ List of 3
  $ : num 1.73
 ```
 
- 
+
 ## Capturing output
 
 To capture the output produced by futures, use `capture.output()` as you would do when capturing output elsewhere in R.  For example,
@@ -154,11 +156,67 @@ To capture the output produced by futures, use `capture.output()` as you would d
 ```
 
 
-## Known limitations
-
-It is only the standard output that is relayed.  It is _not possible_ to relay output send to the standard error (stderr), i.e. output by `message()`, `cat(..., file = stderr())`, etc. will be lost.  This is due to a [limitation in R](https://github.com/HenrikBengtsson/Wishlist-for-R/issues/55), preventing us from capturing stderr in a reliable way, particularity across all backends.
 
 
+## Capturing and relaying standard error
+
+Analogously to the standard output, the standard error can be captured and relayed as given by argument `stderr`.  For example,
+
+```r
+> library(future)
+> f <- future({ message("Hello world!"); print(1:3); 42L }, stderr = TRUE)
+> stderr <- capture.output(v <- value(f), type = "message")
+[1] 1 2 3
+> stderr
+[1] "Hello world!"
+> v
+[1] 42
+```
+
+Contrary to the standard output, due to a [limitation in R](https://github.com/HenrikBengtsson/Wishlist-for-R/issues/55), we cannot reliably capture the standard error in all cases.  For example,
+
+```r
+> library(future)
+> f <- future({
++   message("Hello world!")
++   capture.output(x <- NULL, type = "message")
++   message("Hey there")
++   print(1:3)
++   42L
++ }, stderr = TRUE)
+Hey there
+> stderr <- capture.output(v <- value(f), type = "message")
+[1] 1 2 3
+> stderr
+[1] "Hello world!"
+> v
+[1] 42
+```
+
+This limitation is why the default is (currently) `stderr = NA`.  Note that the behavior of `stderr = NA` differ between future backends, e.g.
+
+```r
+> library(future)
+> plan(sequential)
+> fa <- future({ message("Hello world!"); print(1:3); 42L })
+Hello world!
+> v <- value(fa)
+[1] 1 2 3
+> v
+[1] 42
+```
+
+and
+
+```r
+> library(future)
+> plan(multisession)
+> fa <- future({ message("Hello world!"); print(1:3); 42L })
+> v <- value(fa)
+[1] 1 2 3
+> v
+[1] 42
+```
 
 
 [foreach]: https://cran.r-project.org/package=foreach

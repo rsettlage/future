@@ -274,7 +274,7 @@ For example,
 
 Analogously, the standard error is captured and relayed when 
 \code{stderr = TRUE}, dropped when \code{stderr = FALSE}, and
-left alone when \code{stderr = NA}.
+left alone when \code{stderr = NA} (default).
 
 \emph{Known limitations of \code{stderr = TRUE}}: Any call in the future
 expression to code that, directly or indirectly, captures and sinks the
