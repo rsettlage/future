@@ -15,9 +15,6 @@ NEW FEATURES:
    parallel::makeCluster(n, type = "MPI") but that also attempts to workaound
    issues where parallel::stopCluster() causes R to stall.
    
- o [BETA] Now resolved() for ClusterFuture is non-blocking also for clusters
-   of type MPIcluster as created by parallel::makeCluster(..., type = "MPI").
-
  o The error reported when failing to retrieve the results of a future
    evaluated on a localhost cluster/multisession worker or a forked/multicore
    worker is now more informative. Specifically, it mentions whether the worker
@@ -26,6 +23,14 @@ NEW FEATURES:
  o makeClusterPSOCK() and makeClusterMPI() gained argument 'autoStop' for
    controlling whether the cluster should be automatically stopped when
    garbage collected or not.
+
+ o [BETA] Now resolved() for ClusterFuture is non-blocking also for clusters
+   of type MPIcluster as created by parallel::makeCluster(..., type = "MPI").
+
+ o [BETA] Analogously to the standard output, the standard error can now be
+   captured and relayed by using stderr = TRUE.  However, the default is
+   stderr = NA, which leaves the standard error alone.  This is due to a
+   limitation in R preventing us from reliably capturing it in all cases.
 
 BUG FIXES:
 

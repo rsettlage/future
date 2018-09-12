@@ -5,13 +5,14 @@
 \alias{value}
 \title{The value of a future}
 \usage{
-\method{value}{Future}(future, stdout = TRUE, signal = TRUE, ...)
+\method{value}{Future}(future, stdout = TRUE, stderr = TRUE,
+  signal = TRUE, ...)
 }
 \arguments{
 \item{future}{A \link{Future}.}
 
-\item{stdout}{If TRUE, any captured standard output is outputted,
-otherwise not.}
+\item{stdout, stderr}{If TRUE, any captured standard output (error) is
+outputted, otherwise not.}
 
 \item{signal}{A logical specifying whether (\link[base]{conditions})
 should signaled or be returned as values.}

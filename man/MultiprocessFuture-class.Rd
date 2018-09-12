@@ -14,7 +14,7 @@ MultiprocessFuture(expr = NULL, envir = parent.frame(),
 \item{envir}{The \link{environment} from where global objects should be
 identified.}
 
-\item{substitute}{If TRUE, argument \code{expr} is
+\item{substitute}{If \code{TRUE}, argument \code{expr} is
 \code{\link[base]{substitute}()}:ed, otherwise not.}
 
 \item{\dots}{Additional named elements passed to \code{\link{Future}()}.}

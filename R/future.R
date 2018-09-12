@@ -10,10 +10,15 @@
 #' on these settings and there is no need to modify the code when
 #' switching from, say, sequential to parallel processing.
 #'
-#' @inheritParams Future-class
-#' 
 #' @param expr,value An \R \link[base]{expression}.
 #'
+#' @inheritParams Future-class
+#' 
+#' @param stdout,stderr If \code{TRUE}, then the standard output (error) is
+#' captured, and re-outputted when \code{value()} is called.
+#' If \code{FALSE}, any output is silenced (by sinking it to the null device).
+#' If \code{NA}, the output is \emph{not} intercepted.
+#' 
 #' @param evaluator The actual function that evaluates
 #' the future expression and returns a \link{Future}.
 #' The evaluator function should accept all of the same
@@ -178,6 +183,36 @@
 #'   y \%<-\% { median(x) } \%globals\% list(x = x, median = stats::median)
 #' }
 #'
+#' @section Standard output and standard error:
+#' If \code{stdout = TRUE} (default), then any standard output produced when
+#' a future is evaluated is captured and re-outputted ("relayed") when
+#' \code{value()} is called.
+#' If \code{stdout = FALSE}, then the output is captured and dropped (by
+#' directly sending it to the null device).
+#' If \code{stdout = NA}, then the standard output is left alone, where the
+#' exact behavior should be considered unknown / dependent on the backend.
+#' For example,
+#' \preformatted{
+#'   x <- rnorm(1000)
+#'   f <- future({
+#'     str(x)
+#'     median(x)
+#'   })
+#'   y <- value(y)
+#'   ## num [1:1000] -0.369 0.837 -0.422 -1.616 -1.054 ...
+#'   ## [1] -0.01390193
+#' }
+#'
+#' Analogously, the standard error is captured and relayed when 
+#' \code{stderr = TRUE}, dropped when \code{stderr = FALSE}, and
+#' left alone when \code{stderr = NA} (default).
+#'
+#' \emph{Known limitations of \code{stderr = TRUE}}: Any call in the future
+#' expression to code that, directly or indirectly, captures and sinks the
+#' standard error will cause any further standard error to be lost.  This
+#' is a known limitation in \R and stems from the fact that only one
+#' "message" sink can be active at any time.
+#'
 #' @example incl/future.R
 #'
 #'
@@ -190,14 +225,17 @@
 #' @aliases futureCall
 #' @export
 #' @name future
-future <- function(expr, envir = parent.frame(), substitute = TRUE, globals = TRUE, packages = NULL, lazy = FALSE, seed = NULL, evaluator = plan("next"), ...) {
+future <- function(expr, envir = parent.frame(), substitute = TRUE, stdout = TRUE, stderr = NA, globals = TRUE, packages = NULL, lazy = FALSE, seed = NULL, evaluator = plan("next"), ...) {
   if (substitute) expr <- substitute(expr)
 
   if (!is.function(evaluator)) {
     stop("Argument 'evaluator' must be a function: ", typeof(evaluator))
   }
 
- future <- evaluator(expr, envir = envir, substitute = FALSE, lazy = lazy, seed = seed, globals = globals, packages = packages, ...)
+ future <- evaluator(expr, envir = envir, substitute = FALSE,
+                     stdout = stdout, stderr = stderr,
+                     globals = globals, packages = packages,
+                     lazy = lazy, seed = seed, ...)
 
   ## Assert that a future was returned
   if (!inherits(future, "Future")) {

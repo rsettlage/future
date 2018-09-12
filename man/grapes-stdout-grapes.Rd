@@ -2,16 +2,21 @@
 % Please edit documentation in R/stdout_OP.R
 \name{\%stdout\%}
 \alias{\%stdout\%}
-\title{Control whether standard output should be captured or not}
+\alias{\%stderr\%}
+\title{Control whether standard output (error) should be captured or not}
 \usage{
 fassignment \%stdout\% capture
+fassignment \%stderr\% capture
 }
 \arguments{
 \item{fassignment}{The future assignment, e.g.
 \code{x \%<-\% \{ expr \}}.}
 
-\item{capture}{If TRUE, the standard output will be captured, otherwise not.}
+\item{capture}{If \code{TRUE}, then the standard output (error) is
+captured, and re-outputted when the future is resolved.
+If \code{FALSE}, any output is silenced (by sinking it to the null device).
+If \code{NA}, output is \emph{not} intercepted.}
 }
 \description{
-Control whether standard output should be captured or not
+Control whether standard output (error) should be captured or not
 }

@@ -12,14 +12,13 @@
 #' @param envir The \link{environment} from where global objects should be
 #' identified.
 #'
-#' @param substitute If TRUE, argument \code{expr} is
+#' @param substitute If \code{TRUE}, argument \code{expr} is
 #' \code{\link[base]{substitute}()}:ed, otherwise not.
 #'
-#' @param stdout If TRUE (default), then the standard output is captured,
-#' and re-outputted when \code{value()} is called.
-#' If FALSE, any output is silenced (by sinking it to the null device as
-#' it is outputted).
-#' If NA (not recommended), output is \emph{not} intercepted.
+#' @param stdout,stderr If \code{TRUE}, then the standard output (error) is
+#' captured, and re-outputted when \code{value()} is called.
+#' If \code{FALSE}, any output is silenced (by sinking it to the null device).
+#' If \code{NA}, the output is \emph{not} intercepted.
 #' 
 #' @param globals (optional) a logical, a character vector, or a named list
 #' to control how globals are handled.
@@ -67,7 +66,7 @@
 #' @export
 #' @keywords internal
 #' @name Future-class
-Future <- function(expr = NULL, envir = parent.frame(), substitute = FALSE, stdout = TRUE, globals = NULL, packages = NULL, seed = NULL, lazy = FALSE, local = TRUE, gc = FALSE, earlySignal = FALSE, label = NULL, ...) {
+Future <- function(expr = NULL, envir = parent.frame(), substitute = FALSE, stdout = TRUE, stderr = NA, globals = NULL, packages = NULL, seed = NULL, lazy = FALSE, local = TRUE, gc = FALSE, earlySignal = FALSE, label = NULL, ...) {
   if (substitute) expr <- substitute(expr)
   
   if (!is.null(seed)) {
@@ -83,6 +82,7 @@ Future <- function(expr = NULL, envir = parent.frame(), substitute = FALSE, stdo
   }
 
   stop_if_not(is.logical(stdout), length(stdout) == 1L)
+  stop_if_not(is.logical(stderr), length(stderr) == 1L)
   
   if (!is.null(globals)) {
     stop_if_not(is.list(globals),
@@ -109,6 +109,7 @@ Future <- function(expr = NULL, envir = parent.frame(), substitute = FALSE, stdo
   core$expr <- expr
   core$envir <- envir
   core$stdout <- stdout
+  core$stderr <- stderr
   core$globals <- globals
   core$packages <- packages
   core$seed <- seed
@@ -156,6 +157,7 @@ print.Future <- function(x, ...) {
   cat(sprintf("Local evaluation: %s\n", x$local))
   cat(sprintf("Environment: %s\n", capture.output(x$envir)))
   cat(sprintf("Capture standard output: %s\n", x$stdout))
+  cat(sprintf("Capture standard error: %s\n", x$stderr))
 
   ## FIXME: Add method globals_of() for Future such that it's possible
   ## also for SequentialFuture to return something here. /HB 2017-05-17
@@ -359,8 +361,8 @@ result.Future <- function(future, ...) {
 #'
 #' @param future A \link{Future}.
 #' 
-#' @param stdout If TRUE, any captured standard output is outputted,
-#' otherwise not.
+#' @param stdout,stderr If TRUE, any captured standard output (error) is
+#' outputted, otherwise not.
 #' 
 #' @param signal A logical specifying whether (\link[base]{conditions})
 #' should signaled or be returned as values.
@@ -377,7 +379,7 @@ result.Future <- function(future, ...) {
 #' @rdname value
 #' @export
 #' @export value
-value.Future <- function(future, stdout = TRUE, signal = TRUE, ...) {
+value.Future <- function(future, stdout = TRUE, stderr = TRUE, signal = TRUE, ...) {
   if (future$state == "created") {
     future <- run(future)
   }
@@ -401,7 +403,13 @@ value.Future <- function(future, stdout = TRUE, signal = TRUE, ...) {
       inherits(result$stdout, "character")) {
     cat(paste(result$stdout, collapse = "\n"))
   }
-  
+
+  ## Output captured stderr output?
+  if (stdout && length(result$stderr) > 0 &&
+      inherits(result$stderr, "character")) {
+    cat(paste(result$stderr, collapse = "\n"), file = stderr())
+  }
+
   ## Signal captured conditions?
   condition <- result$condition
   if (inherits(condition, "condition")) {
@@ -471,7 +479,7 @@ resolved.Future <- function(x, ...) {
 getExpression <- function(future, ...) UseMethod("getExpression")
 
 #' @export
-getExpression.Future <- function(future, local = future$local, stdout = future$stdout, mc.cores = NULL, ...) {
+getExpression.Future <- function(future, local = future$local, stdout = future$stdout, stderr = future$stderr, mc.cores = NULL, ...) {
   debug <- getOption("future.debug", FALSE)
   ##  mdebug("getExpression() ...")
 
@@ -619,7 +627,7 @@ getExpression.Future <- function(future, local = future$local, stdout = future$s
     })
   } ## if (length(strategiesR) > 0L)
 
-  expr <- makeExpression(expr = future$expr, local = local, stdout = stdout, enter = enter, exit = exit, version = version)
+  expr <- makeExpression(expr = future$expr, local = local, stdout = stdout, stderr = stderr, enter = enter, exit = exit, version = version)
   if (getOption("future.debug", FALSE)) {
     print(expr)
   }
@@ -630,7 +638,7 @@ getExpression.Future <- function(future, local = future$local, stdout = future$s
 } ## getExpression()
 
 
-makeExpression <- function(expr, local = TRUE, stdout = TRUE, globals.onMissing = getOption("future.globals.onMissing", "ignore"), enter = NULL, exit = NULL, version = "1.7") {
+makeExpression <- function(expr, local = TRUE, stdout = TRUE, stderr = TRUE, globals.onMissing = getOption("future.globals.onMissing", "ignore"), enter = NULL, exit = NULL, version = "1.7") {
   ## Evaluate expression in a local() environment?
   if (local) {
     expr <- bquote(local(.(expr)))
@@ -710,7 +718,31 @@ makeExpression <- function(expr, local = TRUE, stdout = TRUE, globals.onMissing 
           close(...future.stdout)
         }, add = TRUE)
       }
-      
+
+      ## Capture standard error?
+      if (is.na(.(stderr))) {  ## stderr = NA
+        ## Don't capture, but also don't block any output
+      } else {
+        if (.(stderr)) {  ## stderr = TRUE
+          ## Capture all output
+          ## NOTE: Capturing to a raw connection is much more efficient
+          ## than to a character connection, cf.
+          ## https://www.jottr.org/2014/05/26/captureoutput/
+          ...future.stderr <- rawConnection(raw(0L), open = "w")
+        } else {  ## stderr = FALSE
+          ## Silence all output by sending it to the void
+          ...future.stderr <- file(
+            switch(.Platform$OS.type, windows = "NUL", "/dev/null"),
+            open = "w"
+          )
+        }
+        sink(...future.stderr, type = "message", split = FALSE)
+        on.exit(if (!is.null(...future.stderr)) {
+          sink(type = "outerr", split = FALSE)
+          close(...future.stderr)
+        }, add = TRUE)
+      }
+
       ...future.result <- tryCatch({
         ...future.value <- .(expr)
         ## A FutureResult object (without requiring the future package)
@@ -751,6 +783,20 @@ makeExpression <- function(expr, local = TRUE, stdout = TRUE, globals.onMissing 
         }
         close(...future.stdout)
         ...future.stdout <- NULL
+      }
+      
+      if (is.na(.(stderr))) {
+      } else {
+        sink(type = "message", split = FALSE)
+        if (.(stderr)) {
+          ...future.result$stderr <- rawToChar(
+            rawConnectionValue(...future.stderr)
+          )
+        } else {
+          ...future.result["stderr"] <- list(NULL)
+        }
+        close(...future.stderr)
+        ...future.stderr <- NULL
       }
       
       ...future.result

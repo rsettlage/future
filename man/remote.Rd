@@ -15,7 +15,7 @@ remote(expr, envir = parent.frame(), substitute = TRUE, lazy = FALSE,
 \item{envir}{The \link{environment} from where global objects should be
 identified.}
 
-\item{substitute}{If TRUE, argument \code{expr} is
+\item{substitute}{If \code{TRUE}, argument \code{expr} is
 \code{\link[base]{substitute}()}:ed, otherwise not.}
 
 \item{lazy}{If \code{FALSE} (default), the future is resolved

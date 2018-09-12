@@ -10,8 +10,8 @@
 \title{Create a future}
 \usage{
 future(expr, envir = parent.frame(), substitute = TRUE,
-  globals = TRUE, packages = NULL, lazy = FALSE, seed = NULL,
-  evaluator = plan("next"), ...)
+  stdout = TRUE, stderr = NA, globals = TRUE, packages = NULL,
+  lazy = FALSE, seed = NULL, evaluator = plan("next"), ...)
 
 futureAssign(x, value, envir = parent.frame(), substitute = TRUE,
   lazy = FALSE, seed = NULL, globals = TRUE, ...,
@@ -29,8 +29,13 @@ futureCall(FUN, args = NULL, envir = parent.frame(), lazy = FALSE,
 \item{envir}{The \link{environment} from where global objects should be
 identified.}
 
-\item{substitute}{If TRUE, argument \code{expr} is
+\item{substitute}{If \code{TRUE}, argument \code{expr} is
 \code{\link[base]{substitute}()}:ed, otherwise not.}
+
+\item{stdout, stderr}{If \code{TRUE}, then the standard output (error) is
+captured, and re-outputted when \code{value()} is called.
+If \code{FALSE}, any output is silenced (by sinking it to the null device).
+If \code{NA}, the output is \emph{not} intercepted.}
 
 \item{globals}{(optional) a logical, a character vector, or a named list
 to control how globals are handled.
@@ -244,6 +249,38 @@ using the \code{\link{\%globals\%}} operator, e.g.
   x <- rnorm(1000)
   y \%<-\% { median(x) } \%globals\% list(x = x, median = stats::median)
 }
+}
+
+\section{Standard output and standard error}{
+
+If \code{stdout = TRUE} (default), then any standard output produced when
+a future is evaluated is captured and re-outputted ("relayed") when
+\code{value()} is called.
+If \code{stdout = FALSE}, then the output is captured and dropped (by
+directly sending it to the null device).
+If \code{stdout = NA}, then the standard output is left alone, where the
+exact behavior should be considered unknown / dependent on the backend.
+For example,
+\preformatted{
+  x <- rnorm(1000)
+  f <- future({
+    str(x)
+    median(x)
+  })
+  y <- value(y)
+  ## num [1:1000] -0.369 0.837 -0.422 -1.616 -1.054 ...
+  ## [1] -0.01390193
+}
+
+Analogously, the standard error is captured and relayed when 
+\code{stderr = TRUE}, dropped when \code{stderr = FALSE}, and
+left alone when \code{stderr = NA}.
+
+\emph{Known limitations of \code{stderr = TRUE}}: Any call in the future
+expression to code that, directly or indirectly, captures and sinks the
+standard error will cause any further standard error to be lost.  This
+is a known limitation in \R and stems from the fact that only one
+"message" sink can be active at any time.
 }
 
 \examples{
