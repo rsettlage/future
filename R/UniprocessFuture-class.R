@@ -37,6 +37,7 @@ UniprocessFuture <- function(expr = NULL, envir = parent.frame(), substitute = F
 }
 
 
+#' @importFrom utils capture.output ls.str
 #' @export
 run.UniprocessFuture <- function(future, ...) {
   debug <- getOption("future.debug", FALSE)
@@ -54,15 +55,100 @@ run.UniprocessFuture <- function(future, ...) {
   expr <- getExpression(future)
   envir <- future$envir
 
+  ## Make sure that all required packages are attached
+  ## Note, this needs to be done prior to overriding the global environment
+  ## in order to make sure the new "global" environment points to the same
+  ## parent.
+  pkgs <- future$packages
+  if (length(pkgs) > 0) {
+    missing <- setdiff(pkgs, search())
+    if (debug) mdebug("Attaching missing required packages: [n = %d] %s", length(pkgs), paste(sQuote(pkgs), collapse = ", "))
+    for (pkg in pkgs) {
+      require(pkg, character.only = TRUE) || stop("Failed to attach package: ", sQuote(pkg))
+    }
+  }
+  
   ## Assign globals to separate "globals" enclosure environment?
   globals <- future$globals
-  if (length(globals) > 0) {
-    if (future$local) {
-      envir <- new.env(parent = envir)
+  if (future$local && length(globals) > 0) {
+    if (debug) mdebug("Updating the global environment ...")
+    ## Create an new "global" environment containing all the globals
+    genv <- as.environment(globals)
+    parent.env(genv) <- parent.env(globalenv())
+    if (debug) {
+      mdebug("Created a new global environment holding the globals:")
+      mdebug("  %s\n", capture.output(ls.str(genv)))
     }
-    for (name in names(globals)) {
-      envir[[name]] <- globals[[name]]
+
+    ## Update any references to the global environments
+    if (debug) mdebug("Updating references to the global environments:")
+    count <- 0L
+    for (name in names(genv)) {
+      fcn <- tryCatch(envir[[name]], error = identity)
+      if (!is.function(fcn)) {
+        if (debug) mdebug("- Skipping %s %s", typeof(fcn), sQuote(name))
+        next
+      }
+      if (!identical(environment(fcn), globalenv())) next
+      environment(fcn) <- genv
+      genv[[name]] <- fcn
+      if (debug) {
+        count <- count + 1L
+        mdebug("- Updated %s: %s", typeof(fcn), sQuote(name))
+      }
     }
+    if (debug) mdebug("- Number of objects updated: %d", count)
+
+    if (debug) mdebug("Updating references to the global environments in calling environment (unless it's in the global environment because we don't want to mess with the global environment):")
+    if (!identical(envir, globalenv())) {
+      count <- 0L
+      for (name in names(envir)) {
+        fcn <- tryCatch(envir[[name]], error = identity)
+        fcn <- tryCatch(force(fcn), error = identity)
+        if (!is.function(fcn)) next
+        if (!identical(environment(fcn), globalenv())) next
+        environment(fcn) <- genv
+        envir[[name]] <- fcn
+        if (debug) {
+          count <- count + 1L
+          mdebug("- Updated %s: %s", typeof(fcn), sQuote(name))
+        }
+      }
+      if (debug) mdebug("- Number of objects updated: %d", count)
+    }
+
+    ## Update the global environment in the environment stack
+    if (debug) mdebug("Updating the global environment in the environment stack")
+    env <- envir
+    updated <- FALSE
+    if (identical(env, globalenv())) {
+      envir <- genv
+      updated <- TRUE
+    } else {
+      while (!identical(env, emptyenv())) {
+        penv <- parent.env(env)
+        if (identical(penv, globalenv())) {
+          parent.env(env) <- genv
+          ## FIXME: Do we really need to reset? /HB 2018-09-16
+          on.exit(parent.env(env) <- penv, add = TRUE)
+          updated <- TRUE
+          break
+        }
+        env <- penv
+      }
+    }
+    if (debug) mdebug(" - New \"global\" environment set: %s", updated)
+
+    ## AD HOC: This uses the existing global environment as a fallback
+    ## after the above temporary "global" environment.  This is done
+    ## because it is expensive to search for all functions that need
+    ## to be updated.
+    ## FIXME: This is "leaky" and should probably be fixed. /HB 2018-09-16
+    if (isTRUE(getOption("future.uniprocess.leaky", TRUE))) {
+      parent.env(genv) <- globalenv()
+    }
+    
+    if (debug) mdebug("Updating the global environment ... done")
   }
 
   ## Run future

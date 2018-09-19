@@ -49,52 +49,58 @@ for (cores in 1:availCores) {
                         globals = globals, lazy = lazy)
         rm(list = c("a", "args"))
         print(f)
-        res1 <- tryCatch({
-          v1 <- value(f)
+        if (inherits(f, "UniprocessFuture") && lazy && globals) {
+          stopifnot(all(c("FUN", "args") %in% names(f$globals)))
+          if (globals) stopifnot("a" %in% names(f$globals))
+        }
+        v <- tryCatch({
+          value(f)
         }, error = identity)
-        stopifnot(!inherits(res1, "FutureError"))
-        if (!inherits(res1, "error")) {
-          str(list(globals = globals, lazy = lazy, v0 = v0, v1 = v1))
-          stopifnot(all.equal(v1, v0))
+        stopifnot(!inherits(v, "FutureError"))
+        if (!inherits(v, "error")) {
+          str(list(globals = globals, lazy = lazy, v0 = v0, v = v))
+          stopifnot(all.equal(v, v0))
         } else {
+          str(list(globals = globals, lazy = lazy, v0 = v0, v = v))
           stopifnot(!globals)
         }
 
-        a <- 3
-        args <- list(x = 42, y = 12)
-        f <- futureCall(function(x, y) a * (x - y), args = args,
-                        globals = "a", lazy = lazy)
-        rm(list = c("a", "args"))
-        print(f)
-        res2 <- tryCatch({
-          v2 <- value(f)
-        }, error = identity)
-        stopifnot(!inherits(res2, "FutureError"))
-        if (!inherits(res2, "error")) {
-          str(list(globals = globals, lazy = lazy, v0 = v0, v2 = v2))
-          stopifnot(all.equal(v2, v0))
-        } else {
-          stopifnot(!globals)
-        }
-        
-        args <- list(x = 42, y = 12)
-        f <- futureCall(function(x, y) a * (x - y), args = args,
-                        globals = list(a = 3), lazy = lazy)
-        rm(list = "args")
-        print(f)
-        res3 <- tryCatch({
-          v3 <- value(f)
-        }, error = identity)
-        stopifnot(!inherits(res3, "FutureError"))
-        if (!inherits(res3, "error")) {
-          str(list(globals = globals, lazy = lazy, v0 = v0, v3 = v3))
-          stopifnot(all.equal(v3, v0))
-        } else {
-          stopifnot(!globals)
-        }
-
-        rm(list = c("v1", "v2", "v3"))
+        rm(list = c("v"))
       }
+
+      a <- 3
+      args <- list(x = 42, y = 12)
+      f <- futureCall(function(x, y) a * (x - y), args = args,
+                      globals = "a", lazy = lazy)
+      rm(list = c("a", "args"))
+      print(f)
+      if (inherits(f, "UniprocessFuture") && lazy && globals) {
+        stopifnot(all(c("FUN", "args") %in% names(f$globals)))
+        if (globals) stopifnot("a" %in% names(f$globals))
+      }
+      v1 <- tryCatch({
+        value(f)
+      }, error = identity)
+      stopifnot(!inherits(v1, "FutureError"))
+      stopifnot(all.equal(v1, v0))
+
+      args <- list(x = 42, y = 12)
+      f <- futureCall(function(x, y) a * (x - y), args = args,
+                      globals = list(a = 3), lazy = lazy)
+      rm(list = "args")
+      print(f)
+      v2 <- tryCatch({
+        value(f)
+      }, error = identity)
+      stopifnot(!inherits(v2, "FutureError"))
+      str(list(globals = list(a = 3), lazy = lazy, v0 = v0, v2 = v2))
+      if (!inherits(v2, "error")) {
+        stopifnot(all.equal(v2, v0))
+      } else {
+        stopifnot(!globals)
+      }
+
+      rm(list = c("v2", "v3"))
     }
   }
   message(sprintf("Testing with %d cores ... DONE", cores))

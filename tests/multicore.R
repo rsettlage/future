@@ -43,9 +43,11 @@ for (cores in 1:min(2L, availableCores("multicore"))) {
     ## variable should not affect the result of the
     ## future.
     a <- 7  ## Make sure globals are frozen
-    v <- value(f)
+    v <- tryCatch({
+      value(f)
+    }, error = identity)
     print(v)
-    stopifnot(v == 0)
+    stopifnot((!globals && inherits(v, "error")) || v == 0)
   
   
     message(sprintf("*** multicore(..., globals = %s) with globals and blocking", globals))
@@ -55,8 +57,11 @@ for (cores in 1:min(2L, availableCores("multicore"))) {
       x[[ii]] <- multicore({ ii }, globals = globals)
     }
     message(sprintf(" - Resolving %d multicore futures", length(x)))
-    v <- sapply(x, FUN = value)
-    stopifnot(all(v == 1:4))
+    v <- tryCatch({
+      sapply(x, FUN = value)
+    }, error = identity)
+    print(v)
+    stopifnot((!globals && inherits(v, "error")) || all(v == 1:4))
   
   
     message(sprintf("*** multicore(..., globals = %s) and errors", globals))

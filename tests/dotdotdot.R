@@ -27,13 +27,24 @@ for (cores in 1:availCores) {
 
   sum_fcns$C <- function(x, y) {
     message("Arguments '...' exists: ", exists("...", inherits = TRUE))
-    y %<-% { sum(x, y) }
-    y
+    z %<-% { sum(x, y) }
+    z
   }
 
   sum_fcns$D <- function(x, y) {
     message("Arguments '...' exists: ", exists("...", inherits = TRUE))
-    y %<-% { sum(x, y, ...) }
+    z %<-% { sum(x, y, ...) }
+    z
+  }
+
+  ## ILLEGAL USAGE:
+  ## Here there is a global variable 'y', but also a local *promise* 'y',
+  ## which will need to "Error: promise already under evaluation: 
+  ## recursive default argument reference or earlier problems?"
+  ## The same happens when we use, e.g. delayedAssign("y", { y + 1 })
+  sum_fcns$E <- function(x, y) {
+    message("Global has the same name as the promise created")
+    y %<-% { sum(x, y) }
     y
   }
 
@@ -50,6 +61,8 @@ for (cores in 1:availCores) {
       print(y)
       if (name %in% c("D")) {
         stopifnot(inherits(y, "try-error"))
+      } else if (name %in% c("E")) {
+        stopifnot(inherits(y, "try-error") || y == 6)
       } else {
         stopifnot(y == 6)
       }
