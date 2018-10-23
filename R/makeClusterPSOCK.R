@@ -163,7 +163,7 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' 
 #' @param revtunnel If TRUE, a reverse SSH tunnel is set up for each worker such
 #' that the worker \R process sets up a socket connection to its local port
-#' \code{(port - rank + 1)} which then reaches the master on port \code{port}.
+#' (== \code{port}) which then reaches the master on port \code{port}.
 #' If FALSE, then the worker will try to connect directly to port \code{port} on
 #' \code{master}.  For more details, see below.
 #' 
@@ -364,7 +364,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
   }
 
   ## Port that the Rscript should use to connect back to the master
-  if (!localMachine && revtunnel) {
+  if (!localMachine && revtunnel && getOption("future.makeClusterPSOCK.port.increment", FALSE)) {
     rscript_port <- port + (rank - 1L)
   } else {
     rscript_port <- port

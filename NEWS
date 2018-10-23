@@ -1,9 +1,13 @@
 Package: future
 ===============
 
-Version: 1.10.0-9000 [2018-10-17]
+Version: 1.10.0-9000 [2018-10-22]
 
- * ...
+SIGNIFICANT CHANGES:
+
+ * makeClusterPSOCK(..., revtunnel = TRUE) no longer increment the local port
+   number used by each worker to connect back to master via the reverse SSH
+   tunnel.  The original design was a thinko and was actually never needed.
  
 
 Version: 1.10.0 [2018-10-16]
