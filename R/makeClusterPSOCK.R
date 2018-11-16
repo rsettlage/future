@@ -1085,7 +1085,7 @@ make_ssh_caller <- function(name = "ssh", bin = NULL) {
   caller <- make_rsh_caller(name = name, bin = bin)
   
   if (.Platform$OS.type == "windows") {
-    v <- caller("version")()
+    v <- caller("version")
     if (any(grepl("OpenSSH_for_Windows", v))) {
       caller(revtunnel_args = function() {
         stop("This SSH client does not support reverse tunneling (revtunnel = TRUE): ", caller("label"))
