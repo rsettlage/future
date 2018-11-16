@@ -31,6 +31,7 @@
 #'
 #' @example incl/makeClusterPSOCK.R
 #'
+#' @importFrom utils file_test
 #' @export
 makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto", "random"), ..., autoStop = FALSE, verbose = getOption("future.debug", FALSE)) {
   if (is.numeric(workers)) {
@@ -371,7 +372,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
     if (is.logical(logfile)) {
       stop_if_not(!is.na(logfile))
       if (logfile) {
-        logfile <- tempfile(pattern = "future_makeClusterPSOCK_", fileext = ".log")
+        logfile <- tempfile(pattern = "makeClusterPSOCK_", fileext = ".log")
       } else {
         logfile <- NULL
       }
@@ -649,7 +650,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
        ## Special: Windows 10 ssh client may not support reverse tunneling. /2018-11-10
        ## https://github.com/PowerShell/Win32-OpenSSH/issues/1265
        if (!localMachine && revtunnel && isTRUE(attr(rshcmd, "OpenSSH_for_Windows"))) {
-         suggestions <- c(suggestions, sprintf("The 'rshcmd' (%s) used may not support reverse tunneling (revtunnel = TRUE). See ?future::makeClusterPSOCK for alternatives.\n", rshcmd("label")))
+         suggestions <- c(suggestions, sprintf("The 'rshcmd' (%s) used may not support reverse tunneling (revtunnel = TRUE). See help(\"makeClusterPSOCK\") for alternatives.\n", rshcmd("label")))
        }
        
        if (length(suggestions) > 0) {
@@ -810,6 +811,8 @@ session_info <- function() {
 }
 
 
+#' @importFrom parallel clusterCall
+#' @importFrom utils capture.output
 add_cluster_session_info <- function(cl) {
   for (ii in seq_along(cl)) {
     node <- cl[[ii]]
@@ -853,6 +856,7 @@ add_cluster_session_info <- function(cl) {
 #' \code{\link[parallel:stopCluster]{stopCluster}(cl)}).
 #'
 #' @keywords internal
+#' @importFrom parallel stopCluster
 #' @export
 autoStopCluster <- function(cl, debug = FALSE) {
   stop_if_not(inherits(cl, "cluster"))
@@ -879,6 +883,7 @@ autoStopCluster <- function(cl, debug = FALSE) {
 }
 
 
+#' @importFrom utils file_test
 make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..., normalize = TRUE) {
   if (!is.null(bin)) {
     if (normalize) {
@@ -1092,6 +1097,7 @@ make_ssh_caller <- function(name = "ssh", bin = NULL) {
 }
 
 
+#' @importFrom utils file_test
 make_rstudio_msys_ssh_caller <- function(name = "rstudio_msys_ssh", bin = NULL) {
   if (is.null(bin)) {
     ## (1) Is 'RSTUDIO_MSYS_SSH' set?
@@ -1156,6 +1162,7 @@ make_rstudio_msys_ssh_caller <- function(name = "rstudio_msys_ssh", bin = NULL) 
 }
 
 
+#' @importFrom utils file_test
 make_putty_plink_caller <- function(name = "putty_plink", bin = NULL) {
   if (is.null(bin)) {
     ## (1) One the PATH?
