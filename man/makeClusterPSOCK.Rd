@@ -16,9 +16,10 @@ makeNodePSOCK(worker = "localhost", master = NULL, port,
   methods = TRUE, useXDR = TRUE, outfile = "/dev/null",
   renice = NA_integer_,
   rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL,
-  password = NULL, revtunnel = TRUE, logfile = NULL,
-  rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L,
-  manual = FALSE, dryrun = FALSE, verbose = FALSE)
+  password = NULL, keyfile = NULL, revtunnel = TRUE,
+  logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts",
+  NULL), rank = 1L, manual = FALSE, dryrun = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{workers}{The hostnames of workers (as a character vector) or the number
@@ -89,9 +90,10 @@ to launch a process on another host and any additional arguments (character
 vector).  These arguments are only applied if \code{machine} is not
 \emph{localhost}.  For more details, see below.}
 
-\item{user, password}{(optional) The user name and password used to
-authenticate on external machine.  Note, most SSH clients does \emph{not}
-support passing the password via the command line and will give an error.}
+\item{user, password, keyfile}{(optional) The user name and password, or
+the user name and keyfile, to be used to authenticate on external machine.
+Note, most SSH clients does \emph{not} support passing the password via
+the command line and will give an error.}
 
 \item{revtunnel}{If TRUE, a reverse SSH tunnel is set up for each worker such
 that the worker \R process sets up a socket connection to its local port

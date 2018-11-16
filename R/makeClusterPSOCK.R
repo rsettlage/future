@@ -173,9 +173,10 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' \emph{Warning: This only works with SSH clients that support option
 #' \code{-E out.log}.}
 #'
-#' @param user,password (optional) The user name and password used to
-#' authenticate on external machine.  Note, most SSH clients does \emph{not}
-#' support passing the password via the command line and will give an error.
+#' @param user,password,keyfile (optional) The user name and password, or
+#' the user name and keyfile, to be used to authenticate on external machine.
+#' Note, most SSH clients does \emph{not} support passing the password via
+#' the command line and will give an error.
 #' 
 #' @param revtunnel If TRUE, a reverse SSH tunnel is set up for each worker such
 #' that the worker \R process sets up a socket connection to its local port
@@ -329,7 +330,7 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #'
 #' @rdname makeClusterPSOCK
 #' @export
-makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTimeout = getOption("future.makeNodePSOCK.connectTimeout", 2 * 60), timeout = getOption("future.makeNodePSOCK.timeout", 30 * 24 * 60 * 60), rscript = NULL, homogeneous = NULL, rscript_args = NULL, methods = TRUE, useXDR = TRUE, outfile = "/dev/null", renice = NA_integer_, rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL, password = NULL, revtunnel = TRUE, logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L, manual = FALSE, dryrun = FALSE, verbose = FALSE) {
+makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTimeout = getOption("future.makeNodePSOCK.connectTimeout", 2 * 60), timeout = getOption("future.makeNodePSOCK.timeout", 30 * 24 * 60 * 60), rscript = NULL, homogeneous = NULL, rscript_args = NULL, methods = TRUE, useXDR = TRUE, outfile = "/dev/null", renice = NA_integer_, rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL, password = NULL, keyfile = NULL, revtunnel = TRUE, logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L, manual = FALSE, dryrun = FALSE, verbose = FALSE) {
   localMachine <- is.element(worker, c("localhost", "127.0.0.1"))
 
   ## Could it be that the worker specifies the name of the localhost?
@@ -499,6 +500,9 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
 
     ## Password?
     rshopts <- c(rshopts, rshcmd("password_args", password))
+
+    ## Keyfile?
+    rshopts <- c(rshopts, rshcmd("keyfile_args", keyfile))
 
     ## Reverse tunneling?
     if (revtunnel) rshopts <- c(rshopts, rshcmd("revtunnel_args", rscript_port, master, port))
@@ -997,6 +1001,9 @@ make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..
 
   keyfile_args <- function(keyfile = NULL, normalize = TRUE) {
     if (is.null(keyfile)) return()
+    if (grepl("[.]pub$", keyfile)) {
+      warning("Argument 'keyfile', which should be a *private* SSH key file, appears to be a *public* SSH key file: ", sQuote(keyfile))
+    }
     stopifnot(file_test("-f", keyfile))
     if (normalize) keyfile <- normalizePath(keyfile, winslash = "/", mustWork = TRUE)
     c("-i", shQuote(keyfile))
@@ -1202,6 +1209,16 @@ make_putty_plink_caller <- function(name = "putty_plink", bin = NULL) {
     if (is.null(password)) return()
     stopifnot(is.character(password), length(password) == 1L, !is.na(password), nzchar(password))
     c("-pw", MASK = password)
+  }, action = "assign")
+
+  caller(keyfile_args = function(keyfile = NULL, normalize = TRUE) {
+    if (is.null(keyfile)) return()
+    if (!grepl("[.]ppk$", keyfile)) {
+      warning("Argument 'keyfile' appears to specify a non-PuTTY *.ppk file: ", sQuote(keyfile))
+    }
+    stopifnot(file_test("-f", keyfile))
+    if (normalize) keyfile <- normalizePath(keyfile, winslash = "/", mustWork = TRUE)
+    c("-i", shQuote(keyfile))
   }, action = "assign")
 
   caller(logfile_args = function(logfile = NULL, normalize = TRUE) {
