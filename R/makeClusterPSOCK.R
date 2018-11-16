@@ -916,7 +916,7 @@ make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..
   system2_args <- function(..., mask = FALSE) {
     args <- list(...)
     args <- unlist(args, use.names = TRUE)
-    if (any(names(args) == "MASK")) {
+    if (mask && any(names(args) == "MASK")) {
       args["MASK"] <- "XXXXXX"
     }
     c(options, args)
