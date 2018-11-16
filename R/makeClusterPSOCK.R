@@ -597,6 +597,8 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
          warnings <<- c(warnings, list(w))
        })
      }, error = function(ex) {
+       suggestions <- NULL
+
        ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
        ## Post-mortem analysis
        ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -606,7 +608,8 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
        ## Inspect and report on the error message
        cmsg <- conditionMessage(ex)
        if (grepl(gettext("reached elapsed time limit"), cmsg)) {
-         msg <- c(msg, sprintf(" * The error produced by socketConnection() was: %s (which suggests that the connection timeout of %.0f seconds (argument 'connectTimeout') kicked in)\n", sQuote(cmsg), connectTimeout))
+         msg <- c(msg, sprintf(" * The error produced by socketConnection() was: %s (argument 'connectTimeout=%.0f' seconds). The reason for this could be that the SSH client was waiting user input (e.g. a password or accepting an unknown host/RSA key fingerprint), which may not be visible when running R in a GUI.\n", sQuote(cmsg), connectTimeout))
+         suggestions <- c(suggestions, "The socketConnection() setup timed out. If this happens while running R from a GUI, some message prompts are invisible.  To see these, run R from a terminal (not a GUI).")
        } else {
          msg <- c(msg, sprintf(" * The error produced by socketConnection() was: %s\n", sQuote(cmsg)))
        }
@@ -631,8 +634,6 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
        msg <- c(msg, sprintf(" * Worker launch call: %s.\n", local_cmd))
 
        ## Propose further troubleshooting methods
-       suggestions <- NULL
-
        ## Enable verbose=TRUE?
        if (!verbose) {
          suggestions <- c(suggestions, "Set 'verbose=TRUE' to see more details.")
