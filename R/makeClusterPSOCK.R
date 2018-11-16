@@ -257,10 +257,12 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' \emph{IMPORTANT: It is not possible to for these functions to log in
 #' and launch R workers on external machines that requires a password to
 #' be entered manually for authentication.}
-#'
 #' Note, depending on whether you run R in a terminal or via a GUI, you might
 #' not even see the password prompt.  It is also likely that you cannot enter
 #' a password, because the connection is set up via a background system call.
+#' On Windows, using the PuTTY plink SSH client, you can specify the password
+#' via the \code{password} argument.  For any other SSH clients, an error
+#' will be produced.
 #'
 #' The poor man's workaround for setup that requires a password is to manually
 #' log into the each of the external machines and launch the R workers by hand.
@@ -332,6 +334,9 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' @export
 makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTimeout = getOption("future.makeNodePSOCK.connectTimeout", 2 * 60), timeout = getOption("future.makeNodePSOCK.timeout", 30 * 24 * 60 * 60), rscript = NULL, homogeneous = NULL, rscript_args = NULL, methods = TRUE, useXDR = TRUE, outfile = "/dev/null", renice = NA_integer_, rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL, password = NULL, keyfile = NULL, revtunnel = TRUE, logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L, manual = FALSE, dryrun = FALSE, verbose = FALSE) {
   localMachine <- is.element(worker, c("localhost", "127.0.0.1"))
+
+  ## Collect warnings to be reported if there's an error at the end
+  warnings <- list()
 
   ## Could it be that the worker specifies the name of the localhost?
   ## Note, this approach preserves worker == "127.0.0.1" if that is given.
@@ -502,7 +507,16 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
     rshopts <- c(rshopts, rshcmd("password_args", password))
 
     ## Keyfile?
-    rshopts <- c(rshopts, rshcmd("keyfile_args", keyfile))
+    if (!is.null(keyfile)) {
+       withCallingHandlers({
+         rshopts <- c(rshopts, rshcmd("keyfile_args", keyfile))
+       }, warning = function(w) {
+         if (verbose) {
+           message(sprintf("%sDetected a warning: %s", verbose_prefix, sQuote(conditionMessage(w))))
+         }
+         warnings <<- c(warnings, list(w))
+       })
+    }
 
     ## Reverse tunneling?
     if (revtunnel) rshopts <- c(rshopts, rshcmd("revtunnel_args", rscript_port, master, port))
@@ -572,7 +586,6 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
      setTimeLimit(elapsed = connectTimeout)
      on.exit(setTimeLimit(elapsed = Inf))
 
-     warnings <- list()
      tryCatch({
        withCallingHandlers({
          socketConnection("localhost", port = port, server = TRUE, 
@@ -600,7 +613,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
 
        ## Inspect and report on any warnings
        if (length(warnings) > 0) {
-         msg <- c(msg, sprintf(" * In addition, socketConnection() produced %d warning(s):\n", length(warnings)))
+         msg <- c(msg, sprintf(" * In addition, %d warning(s) were produced:\n", length(warnings)))
          for (kk in seq_along(warnings)) {
            cmsg <- conditionMessage(warnings[[kk]])
            if (grepl("port [0-9]+ cannot be opened", cmsg)) {
@@ -935,8 +948,6 @@ make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..
     if (is.null(bin)) stop(sprintf("No executable has been set for this SSH client (%s)", name))
     args <- c(options, unlist(args, use.names = FALSE))
     
-#    str(list(command = bin, args = args))
-
     if (warn) {
       res <- system2(command = bin, args = args, ...)
     } else {
@@ -1073,7 +1084,6 @@ make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..
       names <- names(args)
       stopifnot(!is.null(names), all(nchar(names)))
       for (name in names) {
-        print(list(name = name, value = args[[name]]))
         assign(name, args[[name]], envir = .envir, inherits = FALSE)
       }
       ls(envir = .envir, sorted = TRUE)

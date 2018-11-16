@@ -203,10 +203,12 @@ Contrary to \code{rshcmd}, elements of \code{rshopts} are not quoted.
 \emph{IMPORTANT: It is not possible to for these functions to log in
 and launch R workers on external machines that requires a password to
 be entered manually for authentication.}
-
 Note, depending on whether you run R in a terminal or via a GUI, you might
 not even see the password prompt.  It is also likely that you cannot enter
 a password, because the connection is set up via a background system call.
+On Windows, using the PuTTY plink SSH client, you can specify the password
+via the \code{password} argument.  For any other SSH clients, an error
+will be produced.
 
 The poor man's workaround for setup that requires a password is to manually
 log into the each of the external machines and launch the R workers by hand.
