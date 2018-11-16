@@ -16,7 +16,7 @@ makeNodePSOCK(worker = "localhost", master = NULL, port,
   methods = TRUE, useXDR = TRUE, outfile = "/dev/null",
   renice = NA_integer_,
   rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL,
-  revtunnel = TRUE, logfile = NULL,
+  password = NULL, revtunnel = TRUE, logfile = NULL,
   rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L,
   manual = FALSE, dryrun = FALSE, verbose = FALSE)
 }
@@ -89,8 +89,9 @@ to launch a process on another host and any additional arguments (character
 vector).  These arguments are only applied if \code{machine} is not
 \emph{localhost}.  For more details, see below.}
 
-\item{user}{(optional) The user name to be used when communicating with
-another host.}
+\item{user, password}{(optional) The user name and password used to
+authenticate on external machine.  Note, most SSH clients does \emph{not}
+support passing the password via the command line and will give an error.}
 
 \item{revtunnel}{If TRUE, a reverse SSH tunnel is set up for each worker such
 that the worker \R process sets up a socket connection to its local port
@@ -285,9 +286,9 @@ trying to access the connection.
 }
 
 \examples{
+\dontrun{\donttest{
 ## NOTE: Drop 'dryrun = TRUE' below in order to actually connect.  Add
 ## 'verbose = TRUE' if you run into problems and need to troubleshoot.
-
 
 ## EXAMPLE: Two workers on the local machine
 workers <- c("localhost", "localhost")
@@ -427,12 +428,12 @@ cl <- makeClusterPSOCK(
 ## as user 'bob' from a Windows machine with PuTTY installed.
 ## Note, if you have Windows 10, then you have SSH built-in and
 ## can use the same above approach as Linux and macOS users use.
-## Using the explicit special rshcmd = "<putty-plink>", will force
+## Using the explicit special rshcmd = "<putty_plink>", will force
 ## makeClusterPSOCK() to search for and use the PuTTY plink software,
 ## preventing it from using other SSH clients on the system search PATH.
 cl <- makeClusterPSOCK(
   "remote.server.org", user = "bob",
-  rshcmd = "<putty-plink>",
+  rshcmd = "<putty_plink>",
   rshopts = c("-P", 2200, "-i", "C:/Users/bobby/.ssh/putty.ppk"),
   dryrun = TRUE
 )
@@ -440,12 +441,14 @@ cl <- makeClusterPSOCK(
 
 ## EXAMPLE: Remote worker running on Linux from RStudio on Windows
 ## Connect to remote Unix machine 'remote.server.org' on port 2200
-## as user 'bob' from a Windows machine via RStudio's SSH client.
-## Using the explicit special rshcmd = "<rstudio-ssh>", will force
+## as user 'bob' from a Windows machine via RStudio's MSYS SSH client.
+## Using the explicit special rshcmd = "<rstudio_msys_ssh>", will force
 ## makeClusterPSOCK() to use the SSH client that comes with RStudio,
 ## preventing it from using other SSH clients on the system search PATH.
 cl <- makeClusterPSOCK(
-  "remote.server.org", user = "bob", rshcmd = "<rstudio-ssh>",
+  "remote.server.org", user = "bob", rshcmd = "<rstudio_msys_ssh>",
   dryrun = TRUE
 )
+
+}}
 }

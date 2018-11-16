@@ -172,8 +172,9 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #' \emph{Warning: This only works with SSH clients that support option
 #' \code{-E out.log}.}
 #'
-#' @param user (optional) The user name to be used when communicating with
-#' another host.
+#' @param user,password (optional) The user name and password used to
+#' authenticate on external machine.  Note, most SSH clients does \emph{not}
+#' support passing the password via the command line and will give an error.
 #' 
 #' @param revtunnel If TRUE, a reverse SSH tunnel is set up for each worker such
 #' that the worker \R process sets up a socket connection to its local port
@@ -327,7 +328,7 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #'
 #' @rdname makeClusterPSOCK
 #' @export
-makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTimeout = getOption("future.makeNodePSOCK.connectTimeout", 2 * 60), timeout = getOption("future.makeNodePSOCK.timeout", 30 * 24 * 60 * 60), rscript = NULL, homogeneous = NULL, rscript_args = NULL, methods = TRUE, useXDR = TRUE, outfile = "/dev/null", renice = NA_integer_, rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL, revtunnel = TRUE, logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L, manual = FALSE, dryrun = FALSE, verbose = FALSE) {
+makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTimeout = getOption("future.makeNodePSOCK.connectTimeout", 2 * 60), timeout = getOption("future.makeNodePSOCK.timeout", 30 * 24 * 60 * 60), rscript = NULL, homogeneous = NULL, rscript_args = NULL, methods = TRUE, useXDR = TRUE, outfile = "/dev/null", renice = NA_integer_, rshcmd = getOption("future.makeNodePSOCK.rshcmd", NULL), user = NULL, password = NULL, revtunnel = TRUE, logfile = NULL, rshopts = getOption("future.makeNodePSOCK.rshopts", NULL), rank = 1L, manual = FALSE, dryrun = FALSE, verbose = FALSE) {
   localMachine <- is.element(worker, c("localhost", "127.0.0.1"))
 
   ## Could it be that the worker specifies the name of the localhost?
@@ -345,15 +346,18 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
   stop_if_not(length(dryrun) == 1L, !is.na(dryrun))
   
   ## Locate a default SSH client?
-  if (!is.null(rshcmd)) {
+  if (inherits(rshcmd, "rsh_caller")) {
+  } else if (!is.null(rshcmd)) {
     rshcmd <- as.character(rshcmd)
     stop_if_not(length(rshcmd) >= 1L)
   }
 
   rshopts <- as.character(rshopts)
   
-  user <- as.character(user)
-  stop_if_not(length(user) <= 1L)
+  if (!is.null(user)) {
+    user <- as.character(user)
+    stop_if_not(length(user) == 1L)
+  }
   
   port <- as.integer(port)
   if (is.na(port) || port < 0L || port > 65535L) {
@@ -457,66 +461,57 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
   }
 
   if (!localMachine) {
-    ## Find default SSH client
-    find <- is.null(rshcmd)
-    if (find) {
-      which <- NULL
-      if (verbose) {
-        message(sprintf("%sWill search for all 'rshcmd' available\n",
-	        verbose_prefix))
-      }	
-    } else if (all(grepl("^<[a-zA-Z-]+>$", rshcmd))) {
-      find <- TRUE
-      if (verbose) {
-        message(sprintf("%sWill search for specified 'rshcmd' types: %s\n",
-	  verbose_prefix, paste(sQuote(rshcmd), collapse = ", ")))
-      }	  
-      which <- gsub("^<([a-zA-Z-]+)>$", "\\1", rshcmd)
-    }
-
-    if (find) {
-      rshcmd <- find_rshcmd(which = which,
-                            must_work = !localMachine && !manual && !dryrun)
-      if (verbose) {
-        s <- unlist(lapply(rshcmd, FUN = function(r) {
-          sprintf("%s [type=%s, version=%s]", paste(sQuote(r), collapse = ", "), sQuote(attr(r, "type")), sQuote(attr(r, "version")))
-        }))
-        s <- paste(sprintf("%s %d. %s", verbose_prefix, seq_along(s), s), collapse = "\n")
-        message(sprintf("%sFound the following available 'rshcmd':\n%s", verbose_prefix, s))
+    if (!inherits(rshcmd, "rsh_caller")) {
+      ## Find default SSH client
+      find <- is.null(rshcmd)
+      if (find) {
+        which <- NULL
+        if (verbose) {
+          message(sprintf("%sWill search for all 'rshcmd' available\n",
+                  verbose_prefix))
+        }
+      } else if (all(grepl("^<[a-zA-Z_]+>$", rshcmd))) {
+        find <- TRUE
+        if (verbose) {
+          message(sprintf("%sWill search for specified 'rshcmd' types: %s\n",
+                  verbose_prefix, paste(sQuote(rshcmd), collapse = ", ")))
+        }
+        which <- gsub("^<([a-zA-Z_]+)>$", "\\1", rshcmd)
       }
-      rshcmd <- rshcmd[[1]]
-    } else {
-      if (is.null(attr(rshcmd, "type"))) attr(rshcmd, "type") <- "<unknown>"
-      if (is.null(attr(rshcmd, "version"))) attr(rshcmd, "version") <- "<unknown>"
+  
+      if (find) {
+        rshcmd <- find_rshcmd(which = which,
+                              must_work = !localMachine && !manual && !dryrun)
+      } else {
+        bin <- rshcmd[1]
+	options <- rshcmd[-1]
+        rshcmd <- make_rsh_caller(bin = bin, options = options)
+      }
     }
-    s <- sprintf("type=%s, version=%s", sQuote(attr(rshcmd, "type")), sQuote(attr(rshcmd, "version")))
-    rshcmd_label <- sprintf("%s [%s]", paste(sQuote(rshcmd), collapse = ", "), s)
-
-    if (verbose) message(sprintf("%sUsing 'rshcmd': %s", verbose_prefix, rshcmd_label))
     
+    stop_if_not(inherits(rshcmd, "rsh_caller"))
+    
+    if (verbose) message(sprintf("%sUsing 'rshcmd': %s", verbose_prefix, rshcmd("label")))
+
     ## User?
-    if (length(user) == 1L) rshopts <- c("-l", user, rshopts)
+    rshopts <- c(rshopts, rshcmd("user_args", user))
+
+    ## Password?
+    rshopts <- c(rshopts, rshcmd("password_args", password))
 
     ## Reverse tunneling?
-    if (revtunnel) {
-      rshopts <- c(sprintf("-R %d:%s:%d", rscript_port, master, port), rshopts)
-      ## AD HOC: Warn about Windows 10 ssh bug with rev tunneling
-      if (isTRUE(attr(rshcmd, "OpenSSH_for_Windows"))) {
-         msg <- sprintf("WARNING: This 'rshcmd' (%s) may not support reverse tunneling (revtunnel = TRUE)", paste(sQuote(rshcmd), collapse = ", "), rshcmd_label)
-         if (verbose) message(c(verbose_prefix, msg))
-      }
-    }
+    if (revtunnel) rshopts <- c(rshopts, rshcmd("revtunnel_args", rscript_port, master, port))
     
     ## SSH log file?
-    if (is.character(logfile)) {
-      rshopts <- c(sprintf("-E %s", shQuote(logfile)), rshopts)
-    }
-    
-    rshopts <- paste(rshopts, collapse = " ")
+    if (is.character(logfile)) rshopts <- c(rshopts, rshcmd("logfile_args", logfile))
+
+    ## Hostname (and port)
+    rshopts <- c(rshopts, rshcmd("hostname_args", worker))
     
     ## Local commands
-    rsh_call <- paste(paste(shQuote(rshcmd), collapse = " "), rshopts, worker)
+    rsh_call <- rshcmd("system_args", rshopts)
     local_cmd <- paste(rsh_call, shQuote(cmd))
+    rsh_call <- rshcmd("system_args", rshopts, mask = TRUE)
   } else {
     local_cmd <- cmd
   }
@@ -539,7 +534,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
     msg <- paste(c(msg, ""), collapse = "\n")
     cat(msg)
     utils::flush.console()
-    if (dryrun) return(NULL)
+    if (dryrun) return()
   } else {
     if (verbose) {
       message(sprintf("%sStarting worker #%s on %s: %s", verbose_prefix, rank, sQuote(worker), local_cmd))
@@ -640,7 +635,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
 
        ## Log file?
        if (is.character(logfile)) {
-         smsg <- sprintf("Inspect the content of log file %s for %s.", sQuote(logfile), sQuote(rshcmd))
+         smsg <- sprintf("Inspect the content of log file %s for %s.", sQuote(logfile), rshcmd("label"))
          lmsg <- tryCatch(readLines(logfile, n = 15L, warn = FALSE), error = function(ex) NULL)
          if (length(lmsg) > 0) {
            lmsg <- sprintf("     %2d: %s", seq_along(lmsg), lmsg)
@@ -654,7 +649,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
        ## Special: Windows 10 ssh client may not support reverse tunneling. /2018-11-10
        ## https://github.com/PowerShell/Win32-OpenSSH/issues/1265
        if (!localMachine && revtunnel && isTRUE(attr(rshcmd, "OpenSSH_for_Windows"))) {
-         suggestions <- c(suggestions, sprintf("The 'rshcmd' (%s) used may not support reverse tunneling (revtunnel = TRUE). See ?future::makeClusterPSOCK for alternatives.\n", rshcmd_label))
+         suggestions <- c(suggestions, sprintf("The 'rshcmd' (%s) used may not support reverse tunneling (revtunnel = TRUE). See ?future::makeClusterPSOCK for alternatives.\n", rshcmd("label")))
        }
        
        if (length(suggestions) > 0) {
@@ -767,99 +762,42 @@ is_fqdn <- function(worker) {
 #' to search for.  If NULL, a default set of clients supported by the
 #' current platform is searched for.
 #'
-#' @param first If TRUE, the first client found is returned, otherwise
-#' all located clients are returned.
-#'
 #' @param must_work If TRUE and no clients was found, then an error
 #' is produced, otherwise only a warning.
 #'
-#' @return A named list of pathnames to all located SSH clients.
-#' If \code{first = TRUE}, only the first one is returned.
-#' Attribute `version` contains the output from querying the
-#' executable for its version (via command-line option `-V`).
+#' @return A `rsh_caller` function, or `NULL`.
 #'
 #' @export
 #' @keywords internal
-find_rshcmd <- function(which = NULL, first = FALSE, must_work = TRUE) {
-  query_version <- function(bin, args = "-V") {
-    v <- suppressWarnings(system2(bin, args = args, stdout = TRUE, stderr = TRUE))
-    paste(v, collapse = "; ")
-  }
-  
-  find_rstudio_ssh <- function() {
-    path <- Sys.getenv("RSTUDIO_MSYS_SSH")
-    if (!file_test("-d", path)) return(NULL)   
-    path <- normalizePath(path)
-    path_org <- Sys.getenv("PATH")
-    on.exit(Sys.setenv(PATH = path_org))
-    
-    ## Set PATH to only look in RSTUDIO_MSYS_SSH to avoid
-    ## picking up other clients with the same name
-    ## Comment: In RStudio, RSTUDIO_MSYS_SSH is appended
-    ## to the PATH, see PATH in 'Tools -> Shell ...'.
-    Sys.setenv(PATH = path)
-    bin <- Sys.which("ssh")
-    if (!nzchar(bin)) return(NULL)
-    attr(bin, "type") <- "rstudio-ssh"
-    attr(bin, "version") <- query_version(bin, args = "-V")
-    bin
-  }
-
-  find_putty_plink <- function() {
-    bin <- Sys.which("plink")
-    if (!nzchar(bin)) return(NULL)
-    res <- c(bin, "-ssh")
-    attr(res, "type") <- "putty-plink"
-    attr(res, "version") <- query_version(bin, args = "-V")
-    res
-  }
-
-  find_ssh <- function() {
-    bin <- Sys.which("ssh")
-    if (!nzchar(bin)) return(NULL)
-    attr(bin, "type") <- "ssh"
-    v <- query_version(bin, args = "-V")
-    attr(bin, "version") <- v
-    if (any(grepl("OpenSSH_for_Windows", v)))
-      attr(bin, "OpenSSH_for_Windows") <- TRUE
-    bin
-  }
-
+find_rshcmd <- function(which = NULL, must_work = TRUE) {
   if (!is.null(which)) stop_if_not(is.character(which), length(which) >= 1L, !anyNA(which))
-  stop_if_not(is.logical(first), length(first) == 1L, !is.na(first))
   stop_if_not(is.logical(must_work), length(must_work) == 1L, !is.na(must_work))
 
   if (is.null(which)) {
     if (.Platform$OS.type == "windows") {
-      which <- c("ssh", "putty-plink", "rstudio-ssh")
+      which <- c("ssh", "putty_plink", "rstudio_msys_ssh")
     } else {
       which <- "ssh"
     }
   }
-  res <- list()
+  
   for (name in which) {
-    pathname <- switch(name,
-      "ssh"         = find_ssh(),
-      "putty-plink" = find_putty_plink(),
-      "rstudio-ssh" = find_rstudio_ssh(),
+    caller <- switch(name,
+      ssh              = make_ssh_caller(),
+      putty_plink      = make_putty_plink_caller(),
+      rstudio_msys_ssh = make_rstudio_msys_ssh_caller(),
       stop("Unknown 'rshcmd' type: ", sQuote(name))
     )
     
-    if (!is.null(pathname)) {
-      if (first) return(pathname)
-      res[[name]] <- pathname
-    }
-  }    
+    if (!is.null(caller)) return(caller)
+  }
 
-  if (length(res) > 0) return(res)
-  
-  msg <- sprintf("Failed to locate a default SSH client (checked: %s). Please specify one via argument 'rshcmd'.", paste(sQuote(which), collapse = ", ")) #nolint
-  if (must_work) stop(msg)
+  if (must_work) {
+    stop(sprintf("Failed to locate a default SSH client (checked: %s). Please specify one via argument 'rshcmd'.", paste(sQuote(which), collapse = ", ")))
+  }
 
-  pathname <- "ssh"
-  msg <- sprintf("%s Will still try with %s.", msg, sQuote(paste(pathname, collapse = " ")))
-  warning(msg)
-  pathname
+  ## Create a dummy
+  make_rsh_caller(name = which[1], bin = "/path/to/ssh")
 }
 
 
@@ -873,8 +811,6 @@ session_info <- function() {
 
 
 add_cluster_session_info <- function(cl) {
-  stop_if_not(inherits(cl, "cluster"))
-  
   for (ii in seq_along(cl)) {
     node <- cl[[ii]]
     if (is.null(node)) next  ## Happens with dryrun = TRUE
@@ -940,4 +876,344 @@ autoStopCluster <- function(cl, debug = FALSE) {
     })
   }
   cl
+}
+
+
+make_rsh_caller <- function(name = NA_character_, bin = NULL, options = NULL, ..., normalize = TRUE) {
+  if (!is.null(bin)) {
+    if (normalize) {
+      names <- names(bin)
+      bin <- normalizePath(bin, winslash = "/", mustWork = FALSE)
+      names(bin) <- names
+    }
+  }
+  
+  connect <- function(...) {
+    args <- connect_args(...)
+    call(bin, args = args)
+  }
+  
+  connect_args <- function(..., hostname, user = NULL, keyfile = NULL, master = "localhost", master_port = 22L, revtunnel_port = NULL, logfile = NULL) {
+    args <- list()
+    args <- c(args, list(user = user_args(user)))
+    args <- c(args, list(keyfile = keyfile_args(keyfile)))
+    args <- c(args, list(revtunnel = revtunnel_args(revtunnel_port = revtunnel_port, master = master, master_port = master_port)))
+    args <- c(args, list(logfile = logfile_args(logfile)))
+    args <- c(args, list(hostname = hostname))
+    args <- c(args, list(...))
+    args
+  }
+
+  call_wait <- function(...) {
+    call(..., wait = TRUE, stdout = "", stderr = "")
+  }
+
+  system2_args <- function(..., mask = FALSE) {
+    args <- list(...)
+    args <- unlist(args, use.names = TRUE)
+    if (any(names(args) == "MASK")) {
+      args["MASK"] <- "XXXXXX"
+    }
+    c(options, args)
+  }
+
+  system_args <- function(..., collapse = " ") {
+    res <- c(shQuote(bin), system2_args(...))
+    paste(res, collapse = collapse)
+  }
+
+  call <- function(args = list(), ..., warn = TRUE) {
+    if (is.null(bin)) stop(sprintf("No executable has been set for this SSH client (%s)", name))
+    args <- c(options, unlist(args, use.names = FALSE))
+    
+#    str(list(command = bin, args = args))
+
+    if (warn) {
+      res <- system2(command = bin, args = args, ...)
+    } else {
+      res <- suppressWarnings(system2(command = bin, args = args, ...))
+    }
+    
+    if (is.character(res)) {
+      status <- attr(res, "status")
+      if (is.null(status)) status <- 0L
+      attr(res, "status") <- status
+    }
+    
+#    if (status != 0L) {
+#      print(res)
+#      stop(sprintf("System call failed (exit code %d): %s %s", status,
+#                   shQuote(bin), paste(args, collapse = " ")))
+#    }
+
+    res
+  }
+
+  help <- function(collapse = "\n", warn = FALSE, print = TRUE) {
+    res <- call(args = help_args(), stdout = TRUE, stderr = TRUE, warn = warn)
+    res <- paste(res, collapse = collapse)
+    if (print) {
+      cat(res, "\n", sep = "")
+      invisible(res)
+    } else {
+      res
+    }
+  }
+
+  version <- function(collapse = "; ") {
+    res <- call(args = version_args(), stdout = TRUE, stderr = TRUE)
+    paste(res, collapse = collapse)
+  }
+
+  label <- function() {
+    s <- paste0("name=", name)
+    s <- c(s, paste0("version=", tryCatch(sQuote(version()), error = function(ex) NA_character_)))
+    sprintf("%s [%s]", sQuote(bin), paste(s, collapse = ", "))
+  }
+  
+  help_args <- function() {
+    c()
+  }
+
+  version_args <- function() {
+    c("-V")
+  }
+
+  user_args <- function(user = NULL) {
+    if (is.null(user)) return()
+    stopifnot(is.character(user), length(user) == 1L, nzchar(user))
+    c("-l", user)
+  }
+
+  password_args = function(password = NULL) {
+    if (is.null(password)) return()
+    stop("This SSH client does not support specifying password programmatically (argument 'password') - instead use SSH key-based authentication: ", label())
+  }
+
+  keyfile_args <- function(keyfile = NULL, normalize = TRUE) {
+    if (is.null(keyfile)) return()
+    stopifnot(file_test("-f", keyfile))
+    if (normalize) keyfile <- normalizePath(keyfile, winslash = "/", mustWork = TRUE)
+    c("-i", shQuote(keyfile))
+  }
+
+  revtunnel_args <- function(revtunnel_port = NULL, master, master_port) {
+    if (is.null(revtunnel_port)) return()
+    stopifnot(is.numeric(revtunnel_port), length(revtunnel_port) == 1L, !is.na(revtunnel_port), revtunnel_port >= 0L, revtunnel_port <= 65535L)
+    stopifnot(is.numeric(master_port), length(master_port) == 1L, !is.na(master_port), master_port >= 0L, master_port <= 65535L)
+    stopifnot(is.character(master), length(master) == 1L, !is.na(master), nzchar(master))
+    c("-R", sprintf("%d:%s:%d", revtunnel_port, master, master_port))
+  }
+
+  logfile_args <- function(logfile = NULL, normalize = TRUE) {
+    if (is.null(logfile)) return()
+    if (normalize) logfile <- normalizePath(logfile, winslash = "/", mustWork = FALSE)
+    c("-E", shQuote(logfile))
+  }
+
+  hostname_args <- function(hostname, split = FALSE) {
+    stopifnot(is.character(hostname), length(hostname) == 1L, !is.na(hostname), nzchar(hostname))
+    if (!split) return(hostname)
+    
+    pattern <- "^([^:]+):([0-9]+)$"
+    if (!grepl(pattern, hostname)) return(hostname)
+    port <- as.integer(gsub(pattern, "\\2", hostname))
+    stopifnot(is.integer(port), length(port) == 1L, !is.na(port), port >= 0L, port <= 65535L)
+    hostname <- gsub(pattern, "\\1", hostname)
+    c("-p", port, hostname)
+  }
+
+  .envir <- environment()
+  
+  structure(function(..., action = c("call-or-get", "call", "get", "mget", "assign"), envir = parent.frame()) {
+    args <- list(...)
+    action <- match.arg(action)
+
+    if (length(args) == 0L) {
+      args <- list("call")
+    }
+
+    if (action == "call-or-get") {
+      what <- args[[1]]
+      args <- args[-1]
+      field <- get(what, envir = .envir, inherits = FALSE)
+      if (is.function(field)) {
+        do.call(field, args = args, envir = .envir)
+      } else {
+        field
+      }
+    } else if (action == "call") {
+      what <- args[[1]]
+      args <- args[-1]
+      fcn <- get(what, mode = "function", envir = .envir, inherits = FALSE)
+      do.call(fcn, args = args, envir = .envir)
+    } else if (action == "get") {
+      name <- args[[1]]
+      get(name, envir = .envir, inherits = FALSE)
+    } else if (action == "mget") {
+      if (length(args) == 0L) {
+        names <- ls(envir = .envir, sorted = TRUE)
+      } else {
+        names <- unlist(args, use.names = FALSE)
+      }
+      mget(names, envir = .envir, inherits = FALSE)
+    } else if (action == "assign") {
+      names <- names(args)
+      stopifnot(!is.null(names), all(nchar(names)))
+      for (name in names) {
+        print(list(name = name, value = args[[name]]))
+        assign(name, args[[name]], envir = .envir, inherits = FALSE)
+      }
+      ls(envir = .envir, sorted = TRUE)
+    }
+  }, class = c("rsh_caller", "function"))
+} ## make_rsh_caller()
+
+
+make_ssh_caller <- function(name = "ssh", bin = NULL) {
+  if (is.null(bin)) {
+    bin <- Sys.which("ssh")
+    if (!nzchar(bin)) return(NULL)
+    names(bin) <- "PATH"
+  }
+
+  caller <- make_rsh_caller(name = name, bin = bin)
+  
+  if (.Platform$OS.type == "windows") {
+    v <- caller("version")()
+    if (any(grepl("OpenSSH_for_Windows", v))) {
+      caller(revtunnel_args = function() {
+        stop("This SSH client does not support reverse tunneling (revtunnel = TRUE): ", caller("label"))
+      }, action = "assign")
+    }
+  }
+
+  caller
+}
+
+
+make_rstudio_msys_ssh_caller <- function(name = "rstudio_msys_ssh", bin = NULL) {
+  if (is.null(bin)) {
+    ## (1) Is 'RSTUDIO_MSYS_SSH' set?
+    path <- Sys.getenv("RSTUDIO_MSYS_SSH")
+    if (file_test("-d", path)) {
+      path <- normalizePath(path)
+      bin <- local({
+        path_org <- Sys.getenv("PATH")
+        on.exit(Sys.setenv(PATH = path_org))
+      
+        ## Set PATH to only look in RSTUDIO_MSYS_SSH to avoid
+        ## picking up other clients with the same name
+        ## Comment: In RStudio, RSTUDIO_MSYS_SSH is appended
+        ## to the PATH, see PATH in 'Tools -> Shell ...'.
+        Sys.setenv(PATH = path)
+        Sys.which("ssh")
+      })	
+      names(bin) <- "RSTUDIO_MSYS_SSH"
+      if (!nzchar(bin)) bin <- NULL
+    }
+
+    ## (2) In 'RSTUDIO_HOME', e.g. RSTUDIO_HOME=C:/Program Files/RStudio?
+    ##     Note that 'RSTUDIO_HOME' is "our" invention
+    if (is.null(bin)) {
+      path <- file.path(Sys.getenv("RSTUDIO_HOME"), "bin")
+      path <- dir(path = path, pattern = "msys-ssh.*", full.names = TRUE)[1]
+      bin <- file.path(path, "ssh.exe")
+      names(bin) <- "RSTUDIO_HOME"
+      if (!file_test("-f", bin)) bin <- NULL
+    }
+
+    ## (3) In any of the common places?
+    if (is.null(bin)) {
+      envs <- c("ProgramFiles", "ProgramFiles(x86)", "ProgramW6432")
+      for (env in envs) {
+        path <- Sys.getenv(env)
+        path <- file.path(path, "RStudio", "bin")
+        if (!file_test("-d", path)) next
+        path <- dir(path, pattern = "msys-ssh.*", full.names = TRUE)[1]
+        pathname <- file.path(path, "ssh.exe")
+        if (file_test("-f", pathname)) {
+          bin <- pathname
+          names(bin) <- env
+	  break
+	}
+      }
+    }
+
+    ## Nothing found?
+    if (is.null(bin)) return(NULL)
+  }
+  
+  caller <- make_rsh_caller(name = name, bin = bin)
+
+  caller(logfile_args = function(logfile = NULL) {
+    if (is.null(logfile)) return()
+    stop(sprintf("This SSH client does not support logging (logfile = %s): %s",
+                 sQuote(logfile), caller("label")))
+  }, action = "assign")
+
+  caller
+}
+
+
+make_putty_plink_caller <- function(name = "putty_plink", bin = NULL) {
+  if (is.null(bin)) {
+    ## (1) One the PATH?
+    bin <- Sys.which("plink")
+    names(bin) <- "PATH"
+    if (!nzchar(bin)) bin <- NULL
+
+    ## (2) In 'PUTTY_HOME', e.g. PUTTY_HOME=C:/Program Files/PuTTY?
+    ##     Note that 'PUTTY_HOME' is "our" invention
+    if (is.null(bin)) {
+      bin <- file.path(Sys.getenv("PUTTY_HOME"), "plink.exe")
+      names(bin) <- "PUTTY_HOME"
+      if (!file_test("-f", bin)) bin <- NULL
+    }
+    
+    ## (3) In any of the common places?
+    if (is.null(bin)) {
+      envs <- c("ProgramFiles", "ProgramFiles(x86)", "ProgramW6432")
+      for (env in envs) {
+        path <- Sys.getenv(env)
+        pathname <- file.path(path, "PuTTY", "plink.exe")
+        if (file_test("-f", pathname)) {
+          bin <- pathname
+          names(bin) <- env
+	  break
+	}
+      }
+    }
+
+    ## Nothing found?
+    if (is.null(bin)) return(NULL)
+  }
+
+  caller <- make_rsh_caller(name = name, bin = bin, options = "-ssh")
+
+  caller(password_args = function(password = NULL) {
+    if (is.null(password)) return()
+    stopifnot(is.character(password), length(password) == 1L, !is.na(password), nzchar(password))
+    c("-pw", MASK = password)
+  }, action = "assign")
+
+  caller(logfile_args = function(logfile = NULL, normalize = TRUE) {
+    if (is.null(logfile)) return()
+    if (normalize) logfile <- normalizePath(logfile, winslash = "/", mustWork = FALSE)
+    c("-sshlog", shQuote(logfile))
+  }, action = "assign")
+
+  caller(hostname_args = function(hostname, split = TRUE) {
+    stopifnot(is.character(hostname), length(hostname) == 1L, !is.na(hostname), nzchar(hostname))
+    if (!split) return(hostname)
+    
+    pattern <- "^([^:]+):([0-9]+)$"
+    if (!grepl(pattern, hostname)) return(hostname)
+    port <- as.integer(gsub(pattern, "\\2", hostname))
+    stopifnot(is.integer(port), length(port) == 1L, !is.na(port), port >= 0L, port <= 65535L)
+    hostname <- gsub(pattern, "\\1", hostname)
+    c("-P", port, hostname)
+  }, action = "assign")
+
+  caller
 }

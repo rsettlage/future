@@ -1,6 +1,6 @@
+\dontrun{\donttest{
 ## NOTE: Drop 'dryrun = TRUE' below in order to actually connect.  Add
 ## 'verbose = TRUE' if you run into problems and need to troubleshoot.
-
 
 ## EXAMPLE: Two workers on the local machine
 workers <- c("localhost", "localhost")
@@ -140,12 +140,12 @@ cl <- makeClusterPSOCK(
 ## as user 'bob' from a Windows machine with PuTTY installed.
 ## Note, if you have Windows 10, then you have SSH built-in and
 ## can use the same above approach as Linux and macOS users use.
-## Using the explicit special rshcmd = "<putty-plink>", will force
+## Using the explicit special rshcmd = "<putty_plink>", will force
 ## makeClusterPSOCK() to search for and use the PuTTY plink software,
 ## preventing it from using other SSH clients on the system search PATH.
 cl <- makeClusterPSOCK(
   "remote.server.org", user = "bob",
-  rshcmd = "<putty-plink>",
+  rshcmd = "<putty_plink>",
   rshopts = c("-P", 2200, "-i", "C:/Users/bobby/.ssh/putty.ppk"),
   dryrun = TRUE
 )
@@ -153,11 +153,13 @@ cl <- makeClusterPSOCK(
 
 ## EXAMPLE: Remote worker running on Linux from RStudio on Windows
 ## Connect to remote Unix machine 'remote.server.org' on port 2200
-## as user 'bob' from a Windows machine via RStudio's SSH client.
-## Using the explicit special rshcmd = "<rstudio-ssh>", will force
+## as user 'bob' from a Windows machine via RStudio's MSYS SSH client.
+## Using the explicit special rshcmd = "<rstudio_msys_ssh>", will force
 ## makeClusterPSOCK() to use the SSH client that comes with RStudio,
 ## preventing it from using other SSH clients on the system search PATH.
 cl <- makeClusterPSOCK(
-  "remote.server.org", user = "bob", rshcmd = "<rstudio-ssh>",
+  "remote.server.org", user = "bob", rshcmd = "<rstudio_msys_ssh>",
   dryrun = TRUE
 )
+
+}}
