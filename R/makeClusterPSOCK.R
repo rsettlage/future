@@ -661,7 +661,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
          }
          suggestions <- c(suggestions, smsg)
        } else {
-         suggestions <- c(suggestions, sprintf("Set 'logfile=TRUE' to enable logging for %s.", sQuote(rshcmd)))
+         suggestions <- c(suggestions, sprintf("Set 'logfile=TRUE' to enable logging for %s.", sQuote(rshcmd("label"))))
        }
        
        ## Special: Windows 10 ssh client may not support reverse tunneling. /2018-11-10
