@@ -170,35 +170,13 @@ Version: 1.16.0
 
 # reproducible
 
-Version: 0.2.3
+Version: 0.2.5
 
 ## In both
 
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/test-all.R’ failed.
-    Last 13 lines of output:
-      Attributes: < Component "layers": Component 2: Attributes: < Component 3: Attributes: < Component 13: 'is.NA' value mismatch: 25 in current 27 in target > > >
-      
-      ── 2. Error: git-related functions work (@test-git.R#14)  ──────────────────────
-      object 'parse_git_repo' not found
-      1: checkoutVersion("PredictiveEcology/reproducible", localRepoPath = tmpDir, progress = FALSE) at testthat/test-git.R:14
-      2: utils::getFromNamespace("parse_git_repo", "devtools")
-      3: get(x, envir = ns, inherits = FALSE)
-      
-      ══ testthat results  ═══════════════════════════════════════════════════════════
-      OK: 169 SKIPPED: 11 FAILED: 2
-      1. Failure: fastMask produces correct results (@test-gis.R#22) 
-      2. Error: git-related functions work (@test-git.R#14) 
-      
-      Error: testthat unit tests failed
-      Execution halted
-    ```
-
 *   checking dependencies in R code ... NOTE
     ```
-    Namespace in Imports field not imported from: ‘gdalUtils’
+    Namespace in Imports field not imported from: ‘devtools’
       All declared Imports should be used.
     ```
 
@@ -225,5 +203,22 @@ Version: 0.57.0
       installed size is 45.2Mb
       sub-directories of 1Mb or more:
         libs  43.7Mb
+    ```
+
+# tableschema.r
+
+Version: 1.1.0
+
+## In both
+
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespace in Imports field not imported from: ‘iterators’
+      All declared Imports should be used.
+    ```
+
+*   checking Rd cross-references ... NOTE
+    ```
+    Package unavailable to check Rd xrefs: ‘parsedate’
     ```
 

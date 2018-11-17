@@ -10,7 +10,7 @@
 |collate  |en_US.UTF-8                  |
 |ctype    |en_US.UTF-8                  |
 |tz       |America/Los_Angeles          |
-|date     |2018-11-13                   |
+|date     |2018-11-16                   |
 
 # Dependencies
 
@@ -23,7 +23,7 @@
 
 # Revdeps
 
-## All (41)
+## All (42)
 
 |package                                         |version    |error |warning |note |
 |:-----------------------------------------------|:----------|:-----|:-------|:----|
@@ -61,11 +61,12 @@
 |PSCBS                                           |0.64.0     |      |        |     |
 |[QDNAseq](problems.md#qdnaseq)                  |1.16.0     |      |1       |     |
 |R.filesets                                      |2.12.1     |      |        |     |
-|[reproducible](problems.md#reproducible)        |0.2.3      |1     |        |1    |
+|[reproducible](problems.md#reproducible)        |0.2.5      |      |        |1    |
 |[robotstxt](problems.md#robotstxt)              |0.6.2      |      |        |1    |
 |RTransferEntropy                                |0.2.7      |      |        |     |
 |[skpr](problems.md#skpr)                        |0.57.0     |      |        |1    |
 |sperrorest                                      |2.1.5      |      |        |     |
 |startR                                          |0.0.1      |      |        |     |
+|[tableschema.r](problems.md#tableschemar)       |1.1.0      |      |        |2    |
 |vinereg                                         |0.5.0      |      |        |     |
 
