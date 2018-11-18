@@ -491,7 +491,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
                               must_work = !localMachine && !manual && !dryrun)
       } else {
         bin <- rshcmd[1]
-	options <- rshcmd[-1]
+        options <- rshcmd[-1]
         rshcmd <- make_rsh_caller(bin = bin, options = options)
       }
     }
@@ -1132,7 +1132,7 @@ make_rstudio_msys_ssh_caller <- function(name = "rstudio_msys_ssh", bin = NULL) 
         ## to the PATH, see PATH in 'Tools -> Shell ...'.
         Sys.setenv(PATH = path)
         Sys.which("ssh")
-      })	
+      })
       names(bin) <- "RSTUDIO_MSYS_SSH"
       if (!nzchar(bin)) bin <- NULL
     }
@@ -1159,8 +1159,8 @@ make_rstudio_msys_ssh_caller <- function(name = "rstudio_msys_ssh", bin = NULL) 
         if (file_test("-f", pathname)) {
           bin <- pathname
           names(bin) <- env
-	  break
-	}
+          break
+        }
       }
     }
 
@@ -1205,8 +1205,8 @@ make_putty_plink_caller <- function(name = "putty_plink", bin = NULL) {
         if (file_test("-f", pathname)) {
           bin <- pathname
           names(bin) <- env
-	  break
-	}
+          break
+        }
       }
     }
 
