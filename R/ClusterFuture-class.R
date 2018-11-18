@@ -230,7 +230,7 @@ resolved.ClusterFuture <- function(x, timeout = 0.2, ...) {
     if (!isValid) {
       label <- x$label
       if (is.null(label)) label <- "<none>"
-      stop(FutureError(sprintf("Cannot resolve %s future (%s), because the connection to the worker is corrupt: %s", class(future)[1], label, attr(isValid, "reason", exact = TRUE)), future = future))
+      stop(FutureError(sprintf("Cannot resolve %s (%s), because the connection to the worker is corrupt: %s", class(x)[1], label, attr(isValid, "reason", exact = TRUE)), future = future))
     }
 
     ## WORKAROUND: Non-integer timeouts (at least < 2.0 seconds) may result in
@@ -284,7 +284,7 @@ result.ClusterFuture <- function(future, ...) {
     if (!isValid) {
       label <- future$label
       if (is.null(label)) label <- "<none>"
-      stop(FutureError(sprintf("Cannot receive result of %s future (%s), because the connection to the worker is corrupt: %s", class(future)[1], label, attr(isValid, "reason", exact = TRUE)), future = future))
+      stop(FutureError(sprintf("Cannot receive results for %s (%s), because the connection to the worker is corrupt: %s", class(future)[1], label, attr(isValid, "reason", exact = TRUE)), future = future))
     }
   }
 
@@ -326,14 +326,14 @@ result.ClusterFuture <- function(future, ...) {
     if (!is.null(host)) {
       if (localhost && is.numeric(pid)) {
         alive <- pid_exists(pid)
-	if (is.na(alive)) {
-	  msg2 <- "Failed to determined whether a process with this PID exists or not, i.e. cannot infer whether localhost worker is alive or not."
-	} else if (alive) {
-	  msg2 <- "A process with this PID exists, which suggests that the localhost worker is still alive."
-	} else {
-	  msg2 <- "No process exists with this PID, i.e. the localhost worker is no longer alive."
-	}
-	postmortem$alive <- msg2
+        if (is.na(alive)) {
+          msg2 <- "Failed to determined whether a process with this PID exists or not, i.e. cannot infer whether localhost worker is alive or not."
+        } else if (alive) {
+          msg2 <- "A process with this PID exists, which suggests that the localhost worker is still alive."
+        } else {
+          msg2 <- "No process exists with this PID, i.e. the localhost worker is no longer alive."
+        }
+        postmortem$alive <- msg2
       }
     }
 

@@ -222,7 +222,7 @@ plan <- local({
 
 
   ## Main function
-  function(strategy = NULL, ..., substitute = TRUE, .skip = TRUE, .call = TRUE,
+  function(strategy = NULL, ..., substitute = TRUE, .skip = FALSE, .call = TRUE,
            .cleanup = TRUE, .init = TRUE) {
     if (substitute) strategy <- substitute(strategy)
     if (is.logical(.skip)) stop_if_not(length(.skip) == 1L, !is.na(.skip))
@@ -280,7 +280,7 @@ plan <- local({
         if (is.list(first)) {
           strategies <- first
           res <- plan(strategies, substitute = FALSE,
-	              .cleanup = .cleanup, .init = .init)
+                      .cleanup = .cleanup, .init = .init)
           return(invisible(res))
         }
 
