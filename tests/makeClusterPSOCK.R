@@ -3,7 +3,7 @@ source("incl/start.R")
 is_fqdn <- future:::is_fqdn
 is_ip_number <- future:::is_ip_number
 is_localhost <- future:::is_localhost
-find_rshcmd <- future:::find_rshcmd
+find_rsh_caller <- future:::find_rsh_caller
 
 message("*** makeClusterPSOCK() ...")
 
@@ -34,7 +34,7 @@ stopifnot(
   !is_localhost("not.a.localhost.hostname")
 )
 
-cmd <- find_rshcmd(must_work = FALSE)
+cmd <- find_rsh_caller(must_work = FALSE)
 print(cmd)
 
 

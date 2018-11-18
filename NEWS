@@ -8,20 +8,20 @@ NEW FEATURES:
  * Now futureCall() defaults to args = list() making is possible to call
    functions that does not take arguments, e.g. futureCall(function() 42).
 
- * plan() gained argument '.skip = FALSE'.  When TRUE, setting the same future
-   trategy as already set will be skipped, e.g. calling plan(multisession)
-   consecutively will have the same effect as calling it just once.
-
  * makeClusterPSOCK() produces more informative error messages whenever the
    setup of R workers fails.  Also, its verbose messages are now prefixed
    with "[local output] " to help distinguish the output produced by the
    current R session from that produced by background workers.
    
+ * makeClusterPSOCK() gained arguments 'password' (only for PuTTY) and 'logfile'.
+
  * It is now possible to specify what type of SSH clients makeClusterPSOCK()
    automatically searches for and in what order, e.g.
-   'rshcmd = c("<rstudio-ssh>", "<putty-plink>")'.
+   rshcmd = c("<rstudio_msys_ssh>", "<putty_plink>", "<ssh>").
 
- * makeClusterPSOCK() gained argument 'logfile'.
+ * plan() gained argument '.skip = FALSE'.  When TRUE, setting the same future
+   trategy as already set will be skipped, e.g. calling plan(multisession)
+   consecutively will have the same effect as calling it just once.
 
 BUG FIXES:
 

@@ -178,7 +178,7 @@ variable - a variable that is (only) set when running RStudio.
 
 You can override the default set of SSH clients that are searched for
 by specifying them in \code{rshcmd} using the format \code{<...>}, e.g.
-\code{rshcmd = c("<rstudio-ssh>", "<putty-plink>", "<ssh>")}.  See
+\code{rshcmd = c("<rstudio_msys_ssh>", "<putty_plink>", "<ssh>")}.  See
 below for examples.
 
 If no SSH-client is found, an informative error message is produced.

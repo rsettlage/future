@@ -234,7 +234,7 @@ makeClusterPSOCK <- function(workers, makeNode = makeNodePSOCK, port = c("auto",
 #'
 #' You can override the default set of SSH clients that are searched for
 #' by specifying them in \code{rshcmd} using the format \code{<...>}, e.g.
-#' \code{rshcmd = c("<rstudio-ssh>", "<putty-plink>", "<ssh>")}.  See
+#' \code{rshcmd = c("<rstudio_msys_ssh>", "<putty_plink>", "<ssh>")}.  See
 #' below for examples.
 #'
 #' If no SSH-client is found, an informative error message is produced.
@@ -468,7 +468,9 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
   }
 
   if (!localMachine) {
-    if (!inherits(rshcmd, "rsh_caller")) {
+    if (inherits(rshcmd, "rsh_caller")) {
+      rsh_caller <- rshcmd
+    } else {
       ## Find default SSH client
       find <- is.null(rshcmd)
       if (find) {
@@ -487,29 +489,27 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
       }
   
       if (find) {
-        rshcmd <- find_rshcmd(which = which,
-                              must_work = !localMachine && !manual && !dryrun)
+        rsh_caller <- find_rsh_caller(which = which,
+                         must_work = !localMachine && !manual && !dryrun)
       } else {
-        bin <- rshcmd[1]
-        options <- rshcmd[-1]
-        rshcmd <- make_rsh_caller(bin = bin, options = options)
+        rsh_caller <- make_rsh_caller(bin = rshcmd[1], options = rshcmd[-1])
       }
     }
+    stop_if_not(inherits(rsh_caller, "rsh_caller"))
+    rshcmd <- rsh_caller("label")
     
-    stop_if_not(inherits(rshcmd, "rsh_caller"))
-    
-    if (verbose) message(sprintf("%sUsing 'rshcmd': %s", verbose_prefix, rshcmd("label")))
+    if (verbose) message(sprintf("%sUsing 'rshcmd': %s", verbose_prefix, rshcmd))
 
     ## User?
-    rshopts <- c(rshopts, rshcmd("user_args", user))
+    rshopts <- c(rshopts, rsh_caller("user_args", user))
 
     ## Password?
-    rshopts <- c(rshopts, rshcmd("password_args", password))
+    rshopts <- c(rshopts, rsh_caller("password_args", password))
 
     ## Keyfile?
     if (!is.null(keyfile)) {
        withCallingHandlers({
-         rshopts <- c(rshopts, rshcmd("keyfile_args", keyfile))
+         rshopts <- c(rshopts, rsh_caller("keyfile_args", keyfile))
        }, warning = function(w) {
          if (verbose) {
            message(sprintf("%sDetected a warning: %s", verbose_prefix, sQuote(conditionMessage(w))))
@@ -519,18 +519,18 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
     }
 
     ## Reverse tunneling?
-    if (revtunnel) rshopts <- c(rshopts, rshcmd("revtunnel_args", rscript_port, master, port))
+    if (revtunnel) rshopts <- c(rshopts, rsh_caller("revtunnel_args", rscript_port, master, port))
     
     ## SSH log file?
-    if (is.character(logfile)) rshopts <- c(rshopts, rshcmd("logfile_args", logfile))
+    if (is.character(logfile)) rshopts <- c(rshopts, rsh_caller("logfile_args", logfile))
 
     ## Hostname (and port)
-    rshopts <- c(rshopts, rshcmd("hostname_args", worker))
+    rshopts <- c(rshopts, rsh_caller("hostname_args", worker))
     
     ## Local commands
-    rsh_call <- rshcmd("system_args", rshopts)
+    rsh_call <- rsh_caller("system_args", rshopts)
     local_cmd <- paste(rsh_call, shQuote(cmd))
-    rsh_call <- rshcmd("system_args", rshopts, mask = TRUE)
+    rsh_call <- rsh_caller("system_args", rshopts, mask = TRUE)
   } else {
     local_cmd <- cmd
   }
@@ -654,7 +654,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
 
        ## Log file?
        if (is.character(logfile)) {
-         smsg <- sprintf("Inspect the content of log file %s for %s.", sQuote(logfile), rshcmd("label"))
+         smsg <- sprintf("Inspect the content of log file %s for %s.", sQuote(logfile), sQuote(rshcmd))
          lmsg <- tryCatch(readLines(logfile, n = 15L, warn = FALSE), error = function(ex) NULL)
          if (length(lmsg) > 0) {
            lmsg <- sprintf("     %2d: %s", seq_along(lmsg), lmsg)
@@ -662,13 +662,7 @@ makeNodePSOCK <- function(worker = "localhost", master = NULL, port, connectTime
          }
          suggestions <- c(suggestions, smsg)
        } else {
-         suggestions <- c(suggestions, sprintf("Set 'logfile=TRUE' to enable logging for %s.", sQuote(rshcmd("label"))))
-       }
-       
-       ## Special: Windows 10 ssh client may not support reverse tunneling. /2018-11-10
-       ## https://github.com/PowerShell/Win32-OpenSSH/issues/1265
-       if (!localMachine && revtunnel && isTRUE(attr(rshcmd, "OpenSSH_for_Windows"))) {
-         suggestions <- c(suggestions, sprintf("The 'rshcmd' (%s) used may not support reverse tunneling (revtunnel = TRUE). See help(\"makeClusterPSOCK\") for alternatives.\n", rshcmd("label")))
+         suggestions <- c(suggestions, sprintf("Set 'logfile=TRUE' to enable logging for %s.", sQuote(rshcmd)))
        }
        
        if (length(suggestions) > 0) {
@@ -788,7 +782,7 @@ is_fqdn <- function(worker) {
 #'
 #' @export
 #' @keywords internal
-find_rshcmd <- function(which = NULL, must_work = TRUE) {
+find_rsh_caller <- function(which = NULL, must_work = TRUE) {
   if (!is.null(which)) stop_if_not(is.character(which), length(which) >= 1L, !anyNA(which))
   stop_if_not(is.logical(must_work), length(must_work) == 1L, !is.na(must_work))
 
