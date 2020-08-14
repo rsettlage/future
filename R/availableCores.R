@@ -109,6 +109,7 @@ availableCores <- function(constraints = NULL, methods = getOption("future.avail
     if (method == "Slurm") {
       ## Number of cores assigned by Slurm
       n <- getenv("SLURM_CPUS_PER_TASK")
+      if(is.na(n)){cat("cores not detected, defaulting to cores per node, are you running in a container?","\n")}
     } else if (method == "PBS") {
       ## Number of cores assigned by TORQUE/PBS
       n <- getenv("PBS_NUM_PPN")
